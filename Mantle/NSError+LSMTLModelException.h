@@ -1,5 +1,5 @@
 //
-//  NSError+MTLModelException.h
+//  NSError+LSMTLModelException.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 7/6/13.
@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSError (MTLModelException)
+@interface NSError (LSMTLModelException)
 
 /// Creates a new error for an exception that occurred during updating an
-/// MTLModel.
+/// LSMTLModel.
 ///
 /// exception - The exception that was thrown while updating the model.
 ///             This argument must not be nil.

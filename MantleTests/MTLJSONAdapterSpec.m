@@ -1,5 +1,5 @@
 //
-//  MTLJSONAdapterSpec.m
+//  LSMTLJSONAdapterSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-02-13.
@@ -10,18 +10,18 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-#import "MTLTestJSONAdapter.h"
-#import "MTLTestModel.h"
-#import "MTLTransformerErrorExamples.h"
+#import "LSMTLTestJSONAdapter.h"
+#import "LSMTLTestModel.h"
+#import "LSMTLTransformerErrorExamples.h"
 
-@interface MTLJSONAdapter (SpecExtensions)
+@interface LSMTLJSONAdapter (SpecExtensions)
 
 // Used for testing transformer lifetimes.
 + (NSValueTransformer *)NSDateJSONTransformer;
 
 @end
 
-@implementation MTLJSONAdapter (SpecExtensions)
+@implementation LSMTLJSONAdapter (SpecExtensions)
 
 + (NSValueTransformer *)NSDateJSONTransformer {
 	return [[NSValueTransformer alloc] init];
@@ -29,7 +29,7 @@
 
 @end
 
-QuickSpecBegin(MTLJSONAdapterSpec)
+QuickSpecBegin(LSMTLJSONAdapterSpec)
 
 it(@"should initialize with a model class", ^{
 	NSDictionary *values = @{
@@ -37,11 +37,11 @@ it(@"should initialize with a model class", ^{
 		@"count": @"5",
 	};
 
-	MTLJSONAdapter *adapter = [[MTLJSONAdapter alloc] initWithModelClass:MTLTestModel.class];
+	LSMTLJSONAdapter *adapter = [[LSMTLJSONAdapter alloc] initWithModelClass:LSMTLTestModel.class];
 	expect(adapter).notTo(beNil());
 
 	NSError *error = nil;
-	MTLTestModel *model = [adapter modelFromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [adapter modelFromJSONDictionary:values error:&error];
 	expect(error).to(beNil());
 
 	expect(model).notTo(beNil());
@@ -67,7 +67,7 @@ it(@"should initialize nested key paths from JSON", ^{
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(error).to(beNil());
 
@@ -76,7 +76,7 @@ it(@"should initialize nested key paths from JSON", ^{
 	expect(model.nestedName).to(equal(@"bar"));
 
 	__block NSError *serializationError;
-	expect([MTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
+	expect([LSMTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
 	expect(serializationError).to(beNil());
 });
 
@@ -91,7 +91,7 @@ it(@"it should initialize properties with multiple key paths from JSON", ^{
 	};
 
 	NSError *error = nil;
-	MTLMultiKeypathModel *model = [MTLJSONAdapter modelOfClass:MTLMultiKeypathModel.class fromJSONDictionary:values error:&error];
+	LSMTLMultiKeypathModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLMultiKeypathModel.class fromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(error).to(beNil());
 
@@ -102,7 +102,7 @@ it(@"it should initialize properties with multiple key paths from JSON", ^{
 	expect(@(model.nestedRange.length)).to(equal(@34));
 
 	__block NSError *serializationError;
-	expect([MTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
+	expect([LSMTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
 	expect(serializationError).to(beNil());
 });
 
@@ -114,11 +114,11 @@ it(@"should return nil and error with an invalid key path from JSON",^{
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLJSONAdapterErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLJSONAdapterErrorInvalidJSONDictionary)));
+	expect(error.domain).to(equal(LSMTLJSONAdapterErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLJSONAdapterErrorInvalidJSONDictionary)));
 });
 
 it(@"should support key paths across arrays", ^{
@@ -137,12 +137,12 @@ it(@"should support key paths across arrays", ^{
 	};
 
 	NSError *error = nil;
-	MTLArrayTestModel *model = [MTLJSONAdapter modelOfClass:MTLArrayTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLArrayTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLArrayTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
 	expect(error).notTo(beNil());
 
-	expect(error.domain).to(equal(MTLJSONAdapterErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLJSONAdapterErrorInvalidJSONDictionary)));
+	expect(error.domain).to(equal(LSMTLJSONAdapterErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLJSONAdapterErrorInvalidJSONDictionary)));
 });
 
 it(@"should initialize without returning any error when using a JSON dictionary which Null.null as value",^{
@@ -153,7 +153,7 @@ it(@"should initialize without returning any error when using a JSON dictionary 
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(error).to(beNil());
 
@@ -172,7 +172,7 @@ it(@"should ignore unrecognized JSON keys", ^{
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(error).to(beNil());
 
@@ -187,37 +187,37 @@ it(@"should fail to initialize if JSON dictionary validation fails", ^{
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLTestModel.class fromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLTestModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
-	expect(error.domain).to(equal(MTLTestModelErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTestModelNameTooLong)));
+	expect(error.domain).to(equal(LSMTLTestModelErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTestModelNameTooLong)));
 });
 
 it(@"should implicitly transform URLs", ^{
-	MTLURLModel *model = [[MTLURLModel alloc] init];
+	LSMTLURLModel *model = [[LSMTLURLModel alloc] init];
 
 	NSError *error = nil;
-	NSDictionary *JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
+	NSDictionary *JSONDictionary = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:&error];
 
 	expect(JSONDictionary[@"URL"]).to(equal(@"http://github.com"));
 	expect(error).to(beNil());
 });
 
 it(@"should implicitly transform BOOLs", ^{
-	MTLBoolModel *model = [[MTLBoolModel alloc] init];
+	LSMTLBoolModel *model = [[LSMTLBoolModel alloc] init];
 
 	NSError *error = nil;
-	NSDictionary *JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
+	NSDictionary *JSONDictionary = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:&error];
 
 	expect(JSONDictionary[@"flag"]).to(beIdenticalTo((id)kCFBooleanFalse));
 	expect(error).to(beNil());
 });
 
 it(@"should not invoke implicit transformers for property keys not actually backed by properties", ^{
-	MTLNonPropertyModel *model = [[MTLNonPropertyModel alloc] init];
+	LSMTLNonPropertyModel *model = [[LSMTLNonPropertyModel alloc] init];
 
 	NSError *error = nil;
-	NSDictionary *JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
+	NSDictionary *JSONDictionary = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:&error];
 
 	expect(error).to(beNil());
 	expect(JSONDictionary[@"homepage"]).to(equal(model.homepage));
@@ -229,11 +229,11 @@ it(@"should fail to initialize if JSON transformer fails", ^{
 	};
 
 	NSError *error = nil;
-	MTLModel *model = [MTLJSONAdapter modelOfClass:MTLURLModel.class fromJSONDictionary:values error:&error];
+	LSMTLModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLURLModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
-	expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-	expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@666));
+	expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+	expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@666));
 });
 
 it(@"should fail to deserialize if the JSON types don't match the primitive properties", ^{
@@ -242,12 +242,12 @@ it(@"should fail to deserialize if the JSON types don't match the primitive prop
 	};
 
 	NSError *error = nil;
-	MTLModel *model = [MTLJSONAdapter modelOfClass:MTLBoolModel.class fromJSONDictionary:values error:&error];
+	LSMTLModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLBoolModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
 
-	expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-	expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@"Potentially"));
+	expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+	expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@"Potentially"));
 });
 
 it(@"should fail to deserialize if the JSON types don't match the properties", ^{
@@ -256,12 +256,12 @@ it(@"should fail to deserialize if the JSON types don't match the properties", ^
 	};
 
 	NSError *error = nil;
-	MTLModel *model = [MTLJSONAdapter modelOfClass:MTLStringModel.class fromJSONDictionary:values error:&error];
+	LSMTLModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLStringModel.class fromJSONDictionary:values error:&error];
 	expect(model).to(beNil());
 
-	expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-	expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@666));
+	expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+	expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@666));
 });
 
 it(@"should allow subclasses to filter serialized property keys", ^{
@@ -271,10 +271,10 @@ it(@"should allow subclasses to filter serialized property keys", ^{
 		@"nested": @{ @"name": NSNull.null }
 	};
 
-	MTLTestJSONAdapter *adapter = [[MTLTestJSONAdapter alloc] initWithModelClass:MTLTestModel.class];
+	LSMTLTestJSONAdapter *adapter = [[LSMTLTestJSONAdapter alloc] initWithModelClass:LSMTLTestModel.class];
 
 	NSError *error;
-	MTLTestModel *model = [adapter modelFromJSONDictionary:values error:&error];
+	LSMTLTestModel *model = [adapter modelFromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(error).to(beNil());
 
@@ -302,7 +302,7 @@ it(@"should accept any object for id properties", ^{
 	};
 
 	NSError *error = nil;
-	MTLIDModel *model = [MTLJSONAdapter modelOfClass:MTLIDModel.class fromJSONDictionary:values error:&error];
+	LSMTLIDModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLIDModel.class fromJSONDictionary:values error:&error];
 	expect(model).notTo(beNil());
 	expect(model.anyObject).to(equal(@"Not an NSValue"));
 
@@ -310,16 +310,16 @@ it(@"should accept any object for id properties", ^{
 });
 
 it(@"should fail to serialize if a JSON transformer errors", ^{
-	MTLURLModel *model = [[MTLURLModel alloc] init];
+	LSMTLURLModel *model = [[LSMTLURLModel alloc] init];
 
 	[model setValue:@"totallyNotAnNSURL" forKey:@"URL"];
 
 	NSError *error;
-	NSDictionary *dictionary = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
+	NSDictionary *dictionary = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:&error];
 	expect(dictionary).to(beNil());
-	expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-	expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@"totallyNotAnNSURL"));
+	expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+	expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(@"totallyNotAnNSURL"));
 });
 
 it(@"should parse a different model class", ^{
@@ -330,8 +330,8 @@ it(@"should parse a different model class", ^{
 	};
 
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLSubstitutingTestModel.class fromJSONDictionary:values error:&error];
-	expect(model).to(beAnInstanceOf(MTLTestModel.class));
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLSubstitutingTestModel.class fromJSONDictionary:values error:&error];
+	expect(model).to(beAnInstanceOf(LSMTLTestModel.class));
 	expect(error).to(beNil());
 
 	expect(model.name).to(equal(@"foo"));
@@ -339,14 +339,14 @@ it(@"should parse a different model class", ^{
 	expect(model.nestedName).to(equal(@"bar"));
 
 	__block NSError *serializationError;
-	expect([MTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
+	expect([LSMTLJSONAdapter JSONDictionaryFromModel:model error:&serializationError]).to(equal(values));
 	expect(serializationError).to(beNil());
 });
 
 it(@"should serialize different model classes", ^{
-	MTLJSONAdapter *adapter = [[MTLJSONAdapter alloc] initWithModelClass:MTLClassClusterModel.class];
+	LSMTLJSONAdapter *adapter = [[LSMTLJSONAdapter alloc] initWithModelClass:LSMTLClassClusterModel.class];
 
-	MTLChocolateClassClusterModel *chocolate = [MTLChocolateClassClusterModel modelWithDictionary:@{
+	LSMTLChocolateClassClusterModel *chocolate = [LSMTLChocolateClassClusterModel modelWithDictionary:@{
 		@"bitterness": @100
 	} error:NULL];
 
@@ -359,7 +359,7 @@ it(@"should serialize different model classes", ^{
 		@"chocolate_bitterness": @"100"
 	})));
 
-	MTLStrawberryClassClusterModel *strawberry = [MTLStrawberryClassClusterModel modelWithDictionary:@{
+	LSMTLStrawberryClassClusterModel *strawberry = [LSMTLStrawberryClassClusterModel modelWithDictionary:@{
 		@"freshness": @20
 	} error:NULL];
 
@@ -372,14 +372,14 @@ it(@"should serialize different model classes", ^{
 	})));
 });
 
-it(@"should parse model classes not inheriting from MTLModel", ^{
+it(@"should parse model classes not inheriting from LSMTLModel", ^{
 	NSDictionary *values = @{
 		@"name": @"foo",
 	};
 
 	NSError *error = nil;
-	MTLConformingModel *model = [MTLJSONAdapter modelOfClass:MTLConformingModel.class fromJSONDictionary:values error:&error];
-	expect(model).to(beAnInstanceOf(MTLConformingModel.class));
+	LSMTLConformingModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLConformingModel.class fromJSONDictionary:values error:&error];
+	expect(model).to(beAnInstanceOf(LSMTLConformingModel.class));
 	expect(error).to(beNil());
 
 	expect(model.name).to(equal(@"foo"));
@@ -387,37 +387,37 @@ it(@"should parse model classes not inheriting from MTLModel", ^{
 
 it(@"should return an error when no suitable model class is found", ^{
 	NSError *error = nil;
-	MTLTestModel *model = [MTLJSONAdapter modelOfClass:MTLSubstitutingTestModel.class fromJSONDictionary:@{} error:&error];
+	LSMTLTestModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLSubstitutingTestModel.class fromJSONDictionary:@{} error:&error];
 	expect(model).to(beNil());
 
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLJSONAdapterErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLJSONAdapterErrorNoClassFound)));
+	expect(error.domain).to(equal(LSMTLJSONAdapterErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLJSONAdapterErrorNoClassFound)));
 });
 
 it(@"should validate models", ^{
 	NSError *error = nil;
-	MTLValidationModel *model = [MTLJSONAdapter modelOfClass:MTLValidationModel.class fromJSONDictionary:@{} error:&error];
+	LSMTLValidationModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLValidationModel.class fromJSONDictionary:@{} error:&error];
 
 	expect(model).to(beNil());
 
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLTestModelErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTestModelNameMissing)));
+	expect(error.domain).to(equal(LSMTLTestModelErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTestModelNameMissing)));
 });
 
 describe(@"JSON transformers", ^{
 	describe(@"dictionary transformer", ^{
 		__block NSValueTransformer *transformer;
 		
-		__block MTLTestModel *model;
+		__block LSMTLTestModel *model;
 		__block NSDictionary *JSONDictionary;
 		
 		beforeEach(^{
-			model = [[MTLTestModel alloc] init];
-			JSONDictionary = [MTLJSONAdapter JSONDictionaryFromModel:model error:NULL];
+			model = [[LSMTLTestModel alloc] init];
+			JSONDictionary = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:NULL];
 			
-			transformer = [MTLJSONAdapter dictionaryTransformerWithModelClass:MTLTestModel.class];
+			transformer = [LSMTLJSONAdapter dictionaryTransformerWithModelClass:LSMTLTestModel.class];
 			expect(transformer).notTo(beNil());
 		});
 		
@@ -430,11 +430,11 @@ describe(@"JSON transformers", ^{
 			expect([transformer reverseTransformedValue:model]).to(equal(JSONDictionary));
 		});
 		
-		itBehavesLike(MTLTransformerErrorExamples, ^{
+		itBehavesLike(LSMTLTransformerErrorExamples, ^{
 			return @{
-				MTLTransformerErrorExamplesTransformer: transformer,
-				MTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
-				MTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
+				LSMTLTransformerErrorExamplesTransformer: transformer,
+				LSMTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
+				LSMTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
 			};
 		});
 	});
@@ -450,12 +450,12 @@ describe(@"JSON transformers", ^{
 			NSMutableArray *mutableDictionaries = [NSMutableArray array];
 			
 			for (NSUInteger i = 0; i < 10; i++) {
-				MTLTestModel *model = [[MTLTestModel alloc] init];
+				LSMTLTestModel *model = [[LSMTLTestModel alloc] init];
 				model.count = i;
 				
 				[uniqueModels addObject:model];
 				
-				NSDictionary *dict = [MTLJSONAdapter JSONDictionaryFromModel:model error:NULL];
+				NSDictionary *dict = [LSMTLJSONAdapter JSONDictionaryFromModel:model error:NULL];
 				expect(dict).notTo(beNil());
 				
 				[mutableDictionaries addObject:dict];
@@ -467,7 +467,7 @@ describe(@"JSON transformers", ^{
 			models = [uniqueModels copy];
 			JSONDictionaries = [mutableDictionaries copy];
 			
-			transformer = [MTLJSONAdapter arrayTransformerWithModelClass:MTLTestModel.class];
+			transformer = [LSMTLJSONAdapter arrayTransformerWithModelClass:LSMTLTestModel.class];
 			expect(transformer).notTo(beNil());
 		});
 		
@@ -480,11 +480,11 @@ describe(@"JSON transformers", ^{
 			expect([transformer reverseTransformedValue:models]).to(equal(JSONDictionaries));
 		});
 		
-		itBehavesLike(MTLTransformerErrorExamples, ^{
+		itBehavesLike(LSMTLTransformerErrorExamples, ^{
 			return @{
-				MTLTransformerErrorExamplesTransformer: transformer,
-				MTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
-				MTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
+				LSMTLTransformerErrorExamplesTransformer: transformer,
+				LSMTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
+				LSMTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
 			};
 		});
 	});
@@ -496,10 +496,10 @@ describe(@"JSON transformers", ^{
 			@"nested": @{ @"name": NSNull.null }
 		};
 		
-		NSValueTransformer *transformer = [MTLTestJSONAdapter dictionaryTransformerWithModelClass:MTLTestModel.class];
+		NSValueTransformer *transformer = [LSMTLTestJSONAdapter dictionaryTransformerWithModelClass:LSMTLTestModel.class];
 
-		MTLTestModel *model = [transformer transformedValue:values];
-		expect(model).to(beAKindOf(MTLTestModel.class));
+		LSMTLTestModel *model = [transformer transformedValue:values];
+		expect(model).to(beAKindOf(LSMTLTestModel.class));
 		expect(model).notTo(beNil());
 
 		NSDictionary *serialized = [transformer reverseTransformedValue:model];
@@ -521,7 +521,7 @@ describe(@"Deserializing multiple models", ^{
 
 	it(@"should initialize models from an array of JSON dictionaries", ^{
 		NSError *error = nil;
-		NSArray *mantleModels = [MTLJSONAdapter modelsOfClass:MTLTestModel.class fromJSONArray:JSONModels error:&error];
+		NSArray *mantleModels = [LSMTLJSONAdapter modelsOfClass:LSMTLTestModel.class fromJSONArray:JSONModels error:&error];
 
 		expect(error).to(beNil());
 		expect(mantleModels).notTo(beNil());
@@ -532,8 +532,8 @@ describe(@"Deserializing multiple models", ^{
 
 	it(@"should not be affected by a NULL error parameter", ^{
 		NSError *error = nil;
-		NSArray *expected = [MTLJSONAdapter modelsOfClass:MTLTestModel.class fromJSONArray:JSONModels error:&error];
-		NSArray *models = [MTLJSONAdapter modelsOfClass:MTLTestModel.class fromJSONArray:JSONModels error:NULL];
+		NSArray *expected = [LSMTLJSONAdapter modelsOfClass:LSMTLTestModel.class fromJSONArray:JSONModels error:&error];
+		NSArray *models = [LSMTLJSONAdapter modelsOfClass:LSMTLTestModel.class fromJSONArray:JSONModels error:NULL];
 
 		expect(models).to(equal(expected));
 	});
@@ -552,23 +552,23 @@ it(@"should return nil and an error if it fails to initialize any model from an 
 	NSArray *JSONModels = @[ value1, value2 ];
 
 	NSError *error = nil;
-	NSArray *mantleModels = [MTLJSONAdapter modelsOfClass:MTLSubstitutingTestModel.class fromJSONArray:JSONModels error:&error];
+	NSArray *mantleModels = [LSMTLJSONAdapter modelsOfClass:LSMTLSubstitutingTestModel.class fromJSONArray:JSONModels error:&error];
 
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLJSONAdapterErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLJSONAdapterErrorNoClassFound)));
+	expect(error.domain).to(equal(LSMTLJSONAdapterErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLJSONAdapterErrorNoClassFound)));
 	expect(mantleModels).to(beNil());
 });
 
 it(@"should return an array of dictionaries from models", ^{
-	MTLTestModel *model1 = [[MTLTestModel alloc] init];
+	LSMTLTestModel *model1 = [[LSMTLTestModel alloc] init];
 	model1.name = @"foo";
 
-	MTLTestModel *model2 = [[MTLTestModel alloc] init];
+	LSMTLTestModel *model2 = [[LSMTLTestModel alloc] init];
 	model2.name = @"bar";
 
 	NSError *error;
-	NSArray *JSONArray = [MTLJSONAdapter JSONArrayFromModels:@[ model1, model2 ] error:&error];
+	NSArray *JSONArray = [LSMTLJSONAdapter JSONArrayFromModels:@[ model1, model2 ] error:&error];
 
 	expect(error).to(beNil());
 
@@ -582,7 +582,7 @@ it(@"should not leak transformers", ^{
 	__weak id weakTransformer;
 
 	@autoreleasepool {
-		id transformer = [MTLJSONAdapter transformerForModelPropertiesOfClass:NSDate.class];
+		id transformer = [LSMTLJSONAdapter transformerForModelPropertiesOfClass:NSDate.class];
 		weakTransformer = transformer;
 
 		expect(transformer).notTo(beNil());
@@ -601,55 +601,55 @@ it(@"should support recursive models", ^{
 	};
 
 	NSError *error = nil;
-	MTLRecursiveGroupModel *group = [MTLJSONAdapter modelOfClass:MTLRecursiveGroupModel.class fromJSONDictionary:dictionary error:&error];
+	LSMTLRecursiveGroupModel *group = [LSMTLJSONAdapter modelOfClass:LSMTLRecursiveGroupModel.class fromJSONDictionary:dictionary error:&error];
 	expect(group).notTo(beNil());
 	expect(@(group.users.count)).to(equal(@2));
 });
 
-it(@"should automatically transform a property that conforms to MTLJSONSerializing", ^{
+it(@"should automatically transform a property that conforms to LSMTLJSONSerializing", ^{
 	NSDictionary *JSONDictionary = @{
 		@"property": @"property",
-		@"conformingMTLJSONSerializingProperty":@{
+		@"conformingLSMTLJSONSerializingProperty":@{
 			@"username": @"testName",
 			@"count": @"5",
 		},
-		@"nonConformingMTLJSONSerializingProperty": NSNull.null
+		@"nonConformingLSMTLJSONSerializingProperty": NSNull.null
 	};
 
-	MTLJSONAdapter *adapter = [[MTLJSONAdapter alloc] initWithModelClass:MTLPropertyDefaultAdapterModel.class];
+	LSMTLJSONAdapter *adapter = [[LSMTLJSONAdapter alloc] initWithModelClass:LSMTLPropertyDefaultAdapterModel.class];
 	expect(adapter).notTo(beNil());
 
 	NSError *error = nil;
-	MTLPropertyDefaultAdapterModel *model = [MTLJSONAdapter modelOfClass:MTLPropertyDefaultAdapterModel.class fromJSONDictionary:JSONDictionary error:&error];
+	LSMTLPropertyDefaultAdapterModel *model = [LSMTLJSONAdapter modelOfClass:LSMTLPropertyDefaultAdapterModel.class fromJSONDictionary:JSONDictionary error:&error];
 	expect(model).notTo(beNil());
-	expect(model.conformingMTLJSONSerializingProperty).notTo(beNil());
-	expect(model.conformingMTLJSONSerializingProperty.name).to(equal(@"testName"));
-	expect(model.nonConformingMTLJSONSerializingProperty).to(beNil());
+	expect(model.conformingLSMTLJSONSerializingProperty).notTo(beNil());
+	expect(model.conformingLSMTLJSONSerializingProperty.name).to(equal(@"testName"));
+	expect(model.nonConformingLSMTLJSONSerializingProperty).to(beNil());
 	expect(model.property).to(equal(@"property"));
 	expect(error).to(beNil());
 });
 
-it(@"should not automatically transform a property that conforms to MTLModel but not MTLJSONSerializing", ^{
+it(@"should not automatically transform a property that conforms to LSMTLModel but not LSMTLJSONSerializing", ^{
 	NSDictionary *JSONDictionary = @{
 		@"property": @"property",
-		@"conformingMTLJSONSerializingProperty":@{
+		@"conformingLSMTLJSONSerializingProperty":@{
 			@"username": @"testName",
 			@"count": @"5",
 		},
 		/// Triggers an error since the dictionary is not automatically parsed
 		/// and no transformer is supplied.
-		@"nonConformingMTLJSONSerializingProperty": @{}
+		@"nonConformingLSMTLJSONSerializingProperty": @{}
 	};
 
-	MTLJSONAdapter *adapter = [[MTLJSONAdapter alloc] initWithModelClass:MTLPropertyDefaultAdapterModel.class];
+	LSMTLJSONAdapter *adapter = [[LSMTLJSONAdapter alloc] initWithModelClass:LSMTLPropertyDefaultAdapterModel.class];
 	expect(adapter).notTo(beNil());
 
 	NSError *error = nil;
-	MTLPropertyDefaultAdapterModel *model = [adapter modelFromJSONDictionary:JSONDictionary error:&error];
+	LSMTLPropertyDefaultAdapterModel *model = [adapter modelFromJSONDictionary:JSONDictionary error:&error];
 	expect(model).to(beNil());
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
+	expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
 });
 
 QuickSpecEnd

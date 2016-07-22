@@ -1,19 +1,19 @@
 //
-//  NSDictionary+MTLMappingAdditions.m
+//  NSDictionary+LSMTLMappingAdditions.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/31/13.
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import "MTLModel.h"
+#import "LSMTLModel.h"
 
-#import "NSDictionary+MTLMappingAdditions.h"
+#import "NSDictionary+LSMTLMappingAdditions.h"
 
-@implementation NSDictionary (MTLMappingAdditions)
+@implementation NSDictionary (LSMTLMappingAdditions)
 
 + (NSDictionary *)mtl_identityPropertyMapWithModel:(Class)modelClass {
-	NSCParameterAssert([modelClass conformsToProtocol:@protocol(MTLModel)]);
+	NSCParameterAssert([modelClass conformsToProtocol:@protocol(LSMTLModel)]);
 
 	NSArray *propertyKeys = [modelClass propertyKeys].allObjects;
 

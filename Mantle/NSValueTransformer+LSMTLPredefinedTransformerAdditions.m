@@ -1,26 +1,26 @@
 //
-//  NSValueTransformer+MTLPredefinedTransformerAdditions.m
+//  NSValueTransformer+LSMTLPredefinedTransformerAdditions.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-27.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
-#import "MTLJSONAdapter.h"
-#import "MTLModel.h"
-#import "MTLValueTransformer.h"
+#import "NSValueTransformer+LSMTLPredefinedTransformerAdditions.h"
+#import "LSMTLJSONAdapter.h"
+#import "LSMTLModel.h"
+#import "LSMTLValueTransformer.h"
 
-NSString * const MTLURLValueTransformerName = @"MTLURLValueTransformerName";
-NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerName";
+NSString * const LSMTLURLValueTransformerName = @"LSMTLURLValueTransformerName";
+NSString * const LSMTLBooleanValueTransformerName = @"LSMTLBooleanValueTransformerName";
 
-@implementation NSValueTransformer (MTLPredefinedTransformerAdditions)
+@implementation NSValueTransformer (LSMTLPredefinedTransformerAdditions)
 
 #pragma mark Category Loading
 
 + (void)load {
 	@autoreleasepool {
-		MTLValueTransformer *URLValueTransformer = [MTLValueTransformer
+		LSMTLValueTransformer *URLValueTransformer = [LSMTLValueTransformer
 			transformerUsingForwardBlock:^ id (NSString *str, BOOL *success, NSError **error) {
 				if (str == nil) return nil;
 
@@ -29,10 +29,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 						NSDictionary *userInfo = @{
 							NSLocalizedDescriptionKey: NSLocalizedString(@"Could not convert string to URL", @""),
 							NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected an NSString, got: %@.", @""), str],
-							MTLTransformerErrorHandlingInputValueErrorKey : str
+							LSMTLTransformerErrorHandlingInputValueErrorKey : str
 						};
 
-						*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+						*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 					}
 					*success = NO;
 					return nil;
@@ -45,10 +45,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 						NSDictionary *userInfo = @{
 							NSLocalizedDescriptionKey: NSLocalizedString(@"Could not convert string to URL", @""),
 							NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Input URL string %@ was malformed", @""), str],
-							MTLTransformerErrorHandlingInputValueErrorKey : str
+							LSMTLTransformerErrorHandlingInputValueErrorKey : str
 						};
 
-						*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+						*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 					}
 					*success = NO;
 					return nil;
@@ -64,10 +64,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 						NSDictionary *userInfo = @{
 							NSLocalizedDescriptionKey: NSLocalizedString(@"Could not convert URL to string", @""),
 							NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected an NSURL, got: %@.", @""), URL],
-							MTLTransformerErrorHandlingInputValueErrorKey : URL
+							LSMTLTransformerErrorHandlingInputValueErrorKey : URL
 						};
 
-						*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+						*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 					}
 					*success = NO;
 					return nil;
@@ -75,9 +75,9 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 				return URL.absoluteString;
 			}];
 
-		[NSValueTransformer setValueTransformer:URLValueTransformer forName:MTLURLValueTransformerName];
+		[NSValueTransformer setValueTransformer:URLValueTransformer forName:LSMTLURLValueTransformerName];
 
-		MTLValueTransformer *booleanValueTransformer = [MTLValueTransformer
+		LSMTLValueTransformer *booleanValueTransformer = [LSMTLValueTransformer
 			transformerUsingReversibleBlock:^ id (NSNumber *boolean, BOOL *success, NSError **error) {
 				if (boolean == nil) return nil;
 
@@ -86,10 +86,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 						NSDictionary *userInfo = @{
 							NSLocalizedDescriptionKey: NSLocalizedString(@"Could not convert number to boolean-backed number or vice-versa", @""),
 							NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected an NSNumber, got: %@.", @""), boolean],
-							MTLTransformerErrorHandlingInputValueErrorKey : boolean
+							LSMTLTransformerErrorHandlingInputValueErrorKey : boolean
 						};
 
-						*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+						*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 					}
 					*success = NO;
 					return nil;
@@ -97,13 +97,13 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 				return (NSNumber *)(boolean.boolValue ? kCFBooleanTrue : kCFBooleanFalse);
 			}];
 
-		[NSValueTransformer setValueTransformer:booleanValueTransformer forName:MTLBooleanValueTransformerName];
+		[NSValueTransformer setValueTransformer:booleanValueTransformer forName:LSMTLBooleanValueTransformerName];
 	}
 }
 
 #pragma mark Customizable Transformers
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_arrayMappingTransformerWithTransformer:(NSValueTransformer *)transformer {
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_arrayMappingTransformerWithTransformer:(NSValueTransformer *)transformer {
 	NSParameterAssert(transformer != nil);
 	
 	id (^forwardBlock)(NSArray *values, BOOL *success, NSError **error) = ^ id (NSArray *values, BOOL *success, NSError **error) {
@@ -114,10 +114,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 				NSDictionary *userInfo = @{
 					NSLocalizedDescriptionKey: NSLocalizedString(@"Could not transform non-array type", @""),
 					NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected an NSArray, got: %@.", @""), values],
-					MTLTransformerErrorHandlingInputValueErrorKey: values
+					LSMTLTransformerErrorHandlingInputValueErrorKey: values
 				};
 				
-				*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+				*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 			}
 			*success = NO;
 			return nil;
@@ -133,9 +133,9 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 			}
 			
 			id transformedValue = nil;
-			if ([transformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)]) {
+			if ([transformer conformsToProtocol:@protocol(LSMTLTransformerErrorHandling)]) {
 				NSError *underlyingError = nil;
-				transformedValue = [(id<MTLTransformerErrorHandling>)transformer transformedValue:value success:success error:&underlyingError];
+				transformedValue = [(id<LSMTLTransformerErrorHandling>)transformer transformedValue:value success:success error:&underlyingError];
 				
 				if (*success == NO) {
 					if (error != NULL) {
@@ -143,10 +143,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 							NSLocalizedDescriptionKey: NSLocalizedString(@"Could not transform array", @""),
 							NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Could not transform value at index %d", @""), index],
 							NSUnderlyingErrorKey: underlyingError,
-							MTLTransformerErrorHandlingInputValueErrorKey: values
+							LSMTLTransformerErrorHandlingInputValueErrorKey: values
 						};
 
-						*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+						*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 					}
 					return nil;
 				}
@@ -172,10 +172,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 					NSDictionary *userInfo = @{
 						NSLocalizedDescriptionKey: NSLocalizedString(@"Could not transform non-array type", @""),
 						NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected an NSArray, got: %@.", @""), values],
-						MTLTransformerErrorHandlingInputValueErrorKey: values
+						LSMTLTransformerErrorHandlingInputValueErrorKey: values
 					};
 
-					*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+					*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 				}
 				*success = NO;
 				return nil;
@@ -194,7 +194,7 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 				id transformedValue = nil;
 				if ([transformer respondsToSelector:@selector(reverseTransformedValue:success:error:)]) {
 					NSError *underlyingError = nil;
-					transformedValue = [(id<MTLTransformerErrorHandling>)transformer reverseTransformedValue:value success:success error:&underlyingError];
+					transformedValue = [(id<LSMTLTransformerErrorHandling>)transformer reverseTransformedValue:value success:success error:&underlyingError];
 					
 					if (*success == NO) {
 						if (error != NULL) {
@@ -202,10 +202,10 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 								NSLocalizedDescriptionKey: NSLocalizedString(@"Could not transform array", @""),
 								NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Could not transform value at index %d", @""), index],
 								NSUnderlyingErrorKey: underlyingError,
-								MTLTransformerErrorHandlingInputValueErrorKey: values
+								LSMTLTransformerErrorHandlingInputValueErrorKey: values
 							};
 							
-							*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+							*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 						}
 						return nil;
 					}
@@ -222,25 +222,25 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 		};
 	}
 	if (reverseBlock != nil) {
-		return [MTLValueTransformer transformerUsingForwardBlock:forwardBlock reverseBlock:reverseBlock];
+		return [LSMTLValueTransformer transformerUsingForwardBlock:forwardBlock reverseBlock:reverseBlock];
 	} else {
-		return [MTLValueTransformer transformerUsingForwardBlock:forwardBlock];
+		return [LSMTLValueTransformer transformerUsingForwardBlock:forwardBlock];
 	}
 }
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_validatingTransformerForClass:(Class)modelClass {
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_validatingTransformerForClass:(Class)modelClass {
 	NSParameterAssert(modelClass != nil);
 
-	return [MTLValueTransformer transformerUsingForwardBlock:^ id (id value, BOOL *success, NSError **error) {
+	return [LSMTLValueTransformer transformerUsingForwardBlock:^ id (id value, BOOL *success, NSError **error) {
 		if (value != nil && ![value isKindOfClass:modelClass]) {
 			if (error != NULL) {
 				NSDictionary *userInfo = @{
 					NSLocalizedDescriptionKey: NSLocalizedString(@"Value did not match expected type", @""),
 					NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"Expected %1$@ to be of class %2$@ but got %3$@", @""), value, modelClass, [value class]],
-					MTLTransformerErrorHandlingInputValueErrorKey : value
+					LSMTLTransformerErrorHandlingInputValueErrorKey : value
 				};
 
-				*error = [NSError errorWithDomain:MTLTransformerErrorHandlingErrorDomain code:MTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
+				*error = [NSError errorWithDomain:LSMTLTransformerErrorHandlingErrorDomain code:LSMTLTransformerErrorHandlingErrorInvalidInput userInfo:userInfo];
 			}
 			*success = NO;
 			return nil;
@@ -254,7 +254,7 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 	NSParameterAssert(dictionary != nil);
 	NSParameterAssert(dictionary.count == [[NSSet setWithArray:dictionary.allValues] count]);
 
-	return [MTLValueTransformer
+	return [LSMTLValueTransformer
 			transformerUsingForwardBlock:^ id (id <NSCopying> key, BOOL *success, NSError **error) {
 				return dictionary[key ?: NSNull.null] ?: defaultValue;
 			}
@@ -278,12 +278,12 @@ NSString * const MTLBooleanValueTransformerName = @"MTLBooleanValueTransformerNa
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_JSONDictionaryTransformerWithModelClass:(Class)modelClass {
-	return [MTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_JSONDictionaryTransformerWithModelClass:(Class)modelClass {
+	return [LSMTLJSONAdapter dictionaryTransformerWithModelClass:modelClass];
 }
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_JSONArrayTransformerWithModelClass:(Class)modelClass {
-	return [MTLJSONAdapter arrayTransformerWithModelClass:modelClass];
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_JSONArrayTransformerWithModelClass:(Class)modelClass {
+	return [LSMTLJSONAdapter arrayTransformerWithModelClass:modelClass];
 }
 
 #pragma clang diagnostic pop

@@ -1,5 +1,5 @@
 //
-//  NSValueTransformer+MTLPredefinedTransformerAdditions.h
+//  NSValueTransformer+LSMTLPredefinedTransformerAdditions.h
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-27.
@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "MTLTransformerErrorHandling.h"
+#import "LSMTLTransformerErrorHandling.h"
 
 /// The name for a value transformer that converts strings into URLs and back.
-extern NSString * const MTLURLValueTransformerName;
+extern NSString * const LSMTLURLValueTransformerName;
 
 /// Ensure an NSNumber is backed by __NSCFBoolean/CFBooleanRef
 ///
@@ -20,9 +20,9 @@ extern NSString * const MTLURLValueTransformerName;
 /// 0/1. The exception is when the NSNumber is backed by __NSCFBoolean, which,
 /// though very much an implementation detail, is detected and serialized as a
 /// proper boolean.
-extern NSString * const MTLBooleanValueTransformerName;
+extern NSString * const LSMTLBooleanValueTransformerName;
 
-@interface NSValueTransformer (MTLPredefinedTransformerAdditions)
+@interface NSValueTransformer (LSMTLPredefinedTransformerAdditions)
 
 /// An optionally reversible transformer which applies the given transformer to
 /// each element of an array.
@@ -33,7 +33,7 @@ extern NSString * const MTLBooleanValueTransformerName;
 ///
 /// Returns a transformer which applies a transformation to each element of an
 /// array.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_arrayMappingTransformerWithTransformer:(NSValueTransformer *)transformer;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_arrayMappingTransformerWithTransformer:(NSValueTransformer *)transformer;
 
 /// A reversible value transformer to transform between the keys and objects of a
 /// dictionary.
@@ -56,12 +56,12 @@ extern NSString * const MTLBooleanValueTransformerName;
 ///
 /// Returns a transformer which will map from keys to objects for forward
 /// transformations, and from objects to keys for reverse transformations.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_valueMappingTransformerWithDictionary:(NSDictionary *)dictionary defaultValue:(id)defaultValue reverseDefaultValue:(id)reverseDefaultValue;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_valueMappingTransformerWithDictionary:(NSDictionary *)dictionary defaultValue:(id)defaultValue reverseDefaultValue:(id)reverseDefaultValue;
 
 /// Returns a value transformer created by calling
 /// `+mtl_valueMappingTransformerWithDictionary:defaultValue:reverseDefaultValue:`
 /// with a default value of `nil` and a reverse default value of `nil`.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_valueMappingTransformerWithDictionary:(NSDictionary *)dictionary;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_valueMappingTransformerWithDictionary:(NSDictionary *)dictionary;
 
 /// A value transformer that errors if the transformed value are not of the given
 /// class.
@@ -70,10 +70,10 @@ extern NSString * const MTLBooleanValueTransformerName;
 ///
 /// Returns a transformer which will return an error if the transformed in value
 /// is not a member of class. Otherwise, the value is simply passed through.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_validatingTransformerForClass:(Class)modelClass;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_validatingTransformerForClass:(Class)modelClass;
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_JSONDictionaryTransformerWithModelClass:(Class)modelClass __attribute__((deprecated("Replaced by +[MTLJSONAdapter dictionaryTransformerWithModelClass:]")));
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_JSONDictionaryTransformerWithModelClass:(Class)modelClass __attribute__((deprecated("Replaced by +[LSMTLJSONAdapter dictionaryTransformerWithModelClass:]")));
 
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)mtl_JSONArrayTransformerWithModelClass:(Class)modelClass __attribute__((deprecated("Replaced by +[MTLJSONAdapter arrayTransformerWithModelClass:]")));
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)mtl_JSONArrayTransformerWithModelClass:(Class)modelClass __attribute__((deprecated("Replaced by +[LSMTLJSONAdapter arrayTransformerWithModelClass:]")));
 
 @end

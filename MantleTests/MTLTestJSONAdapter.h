@@ -1,5 +1,5 @@
 //
-//  MTLTestJSONAdapter.h
+//  LSMTLTestJSONAdapter.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 03/04/14.
@@ -9,7 +9,7 @@
 #import <Mantle/Mantle.h>
 
 // Adds a custom key "test" to constructed JSON.
-@interface MTLTestJSONAdapter : MTLJSONAdapter
+@interface LSMTLTestJSONAdapter : LSMTLJSONAdapter
 
 // These property keys are not serialized.
 @property (readwrite, nonatomic, strong) NSSet *ignoredPropertyKeys;

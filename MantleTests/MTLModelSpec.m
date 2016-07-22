@@ -1,5 +1,5 @@
 //
-//  MTLModelSpec.m
+//  LSMTLModelSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-11.
@@ -10,21 +10,21 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-#import "MTLTestModel.h"
+#import "LSMTLTestModel.h"
 
-QuickSpecBegin(MTLModelSpec)
+QuickSpecBegin(LSMTLModelSpec)
 
 it(@"should not loop infinitely in +propertyKeys without any properties", ^{
-	expect(MTLEmptyTestModel.propertyKeys).to(equal([NSSet set]));
+	expect(LSMTLEmptyTestModel.propertyKeys).to(equal([NSSet set]));
 });
 
 it(@"should not include dynamic readonly properties in +propertyKeys", ^{
 	NSSet *expectedKeys = [NSSet setWithObjects:@"name", @"count", @"nestedName", @"weakModel", nil];
-	expect(MTLTestModel.propertyKeys).to(equal(expectedKeys));
+	expect(LSMTLTestModel.propertyKeys).to(equal(expectedKeys));
 });
 
 it(@"should initialize with default values", ^{
-	MTLTestModel *model = [[MTLTestModel alloc] init];
+	LSMTLTestModel *model = [[LSMTLTestModel alloc] init];
 	expect(model).notTo(beNil());
 
 	expect(model.name).to(beNil());
@@ -43,21 +43,21 @@ it(@"should initialize with default values", ^{
 
 it(@"should initialize to default values with a nil dictionary", ^{
 	NSError *error = nil;
-	MTLTestModel *dictionaryModel = [[MTLTestModel alloc] initWithDictionary:nil error:&error];
+	LSMTLTestModel *dictionaryModel = [[LSMTLTestModel alloc] initWithDictionary:nil error:&error];
 	expect(dictionaryModel).notTo(beNil());
 	expect(error).to(beNil());
 
-	MTLTestModel *defaultModel = [[MTLTestModel alloc] init];
+	LSMTLTestModel *defaultModel = [[LSMTLTestModel alloc] init];
 	expect(dictionaryModel).to(equal(defaultModel));
 });
 
 describe(@"with a dictionary of values", ^{
-	__block MTLEmptyTestModel *emptyModel;
+	__block LSMTLEmptyTestModel *emptyModel;
 	__block NSDictionary *values;
-	__block MTLTestModel *model;
+	__block LSMTLTestModel *model;
 
 	beforeEach(^{
-		emptyModel = [[MTLEmptyTestModel alloc] init];
+		emptyModel = [[LSMTLEmptyTestModel alloc] init];
 		expect(emptyModel).notTo(beNil());
 
 		values = @{
@@ -68,7 +68,7 @@ describe(@"with a dictionary of values", ^{
 		};
 
 		NSError *error = nil;
-		model = [[MTLTestModel alloc] initWithDictionary:values error:&error];
+		model = [[LSMTLTestModel alloc] initWithDictionary:values error:&error];
 		expect(model).notTo(beNil());
 		expect(error).to(beNil());
 	});
@@ -86,26 +86,26 @@ describe(@"with a dictionary of values", ^{
 	it(@"should compare equal to a matching model", ^{
 		expect(model).to(equal(model));
 
-		MTLTestModel *matchingModel = [[MTLTestModel alloc] initWithDictionary:values error:NULL];
+		LSMTLTestModel *matchingModel = [[LSMTLTestModel alloc] initWithDictionary:values error:NULL];
 		expect(model).to(equal(matchingModel));
 		expect(@(model.hash)).to(equal(@(matchingModel.hash)));
 		expect(model.dictionaryValue).to(equal(matchingModel.dictionaryValue));
 	});
 
 	it(@"should not compare equal to different model", ^{
-		MTLTestModel *differentModel = [[MTLTestModel alloc] init];
+		LSMTLTestModel *differentModel = [[LSMTLTestModel alloc] init];
 		expect(model).notTo(equal(differentModel));
 		expect(model.dictionaryValue).notTo(equal(differentModel.dictionaryValue));
 	});
 
 	it(@"should implement <NSCopying>", ^{
-		MTLTestModel *copiedModel = [model copy];
+		LSMTLTestModel *copiedModel = [model copy];
 		expect(copiedModel).to(equal(model));
 		expect(copiedModel).notTo(beIdenticalTo(model));
 	});
 
 	it(@"should not consider -weakModel for equality", ^{
-		MTLTestModel *copiedModel = [model copy];
+		LSMTLTestModel *copiedModel = [model copy];
 		copiedModel.weakModel = nil;
 
 		expect(model).to(equal(copiedModel));
@@ -114,19 +114,19 @@ describe(@"with a dictionary of values", ^{
 
 it(@"should fail to initialize if dictionary validation fails", ^{
 	NSError *error = nil;
-	MTLTestModel *model = [[MTLTestModel alloc] initWithDictionary:@{ @"name": @"this is too long a name" } error:&error];
+	LSMTLTestModel *model = [[LSMTLTestModel alloc] initWithDictionary:@{ @"name": @"this is too long a name" } error:&error];
 	expect(model).to(beNil());
 
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLTestModelErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTestModelNameTooLong)));
+	expect(error.domain).to(equal(LSMTLTestModelErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTestModelNameTooLong)));
 });
 
 it(@"should merge two models together", ^{
-	MTLTestModel *target = [[MTLTestModel alloc] initWithDictionary:@{ @"name": @"foo", @"count": @(5) } error:NULL];
+	LSMTLTestModel *target = [[LSMTLTestModel alloc] initWithDictionary:@{ @"name": @"foo", @"count": @(5) } error:NULL];
 	expect(target).notTo(beNil());
 
-	MTLTestModel *source = [[MTLTestModel alloc] initWithDictionary:@{ @"name": @"bar", @"count": @(3) } error:NULL];
+	LSMTLTestModel *source = [[LSMTLTestModel alloc] initWithDictionary:@{ @"name": @"bar", @"count": @(3) } error:NULL];
 	expect(source).notTo(beNil());
 
 	[target mergeValuesForKeysFromModel:source];
@@ -136,44 +136,44 @@ it(@"should merge two models together", ^{
 });
 
 it(@"should consider primitive properties permanent", ^{
-	expect(@([MTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"primitive"])).to(equal(@(MTLPropertyStoragePermanent)));
+	expect(@([LSMTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"primitive"])).to(equal(@(LSMTLPropertyStoragePermanent)));
 });
 
 it(@"should consider object-type assign properties permanent", ^{
-	expect(@([MTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"assignProperty"])).to(equal(@(MTLPropertyStoragePermanent)));
+	expect(@([LSMTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"assignProperty"])).to(equal(@(LSMTLPropertyStoragePermanent)));
 });
 
 it(@"should consider object-type strong properties permanent", ^{
-	expect(@([MTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"strongProperty"])).to(equal(@(MTLPropertyStoragePermanent)));
+	expect(@([LSMTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"strongProperty"])).to(equal(@(LSMTLPropertyStoragePermanent)));
 });
 
 it(@"should ignore readonly properties without backing ivar", ^{
-	expect(@([MTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"notIvarBacked"])).to(equal(@(MTLPropertyStorageNone)));
+	expect(@([LSMTLStorageBehaviorModel storageBehaviorForPropertyWithKey:@"notIvarBacked"])).to(equal(@(LSMTLPropertyStorageNone)));
 });
 
 it(@"should consider properties declared in subclass with storage in superclass permanent", ^{
-	expect(@([MTLStorageBehaviorModelSubclass storageBehaviorForPropertyWithKey:@"shadowedInSubclass"])).to(equal(@(MTLPropertyStoragePermanent)));
-	expect(@([MTLStorageBehaviorModelSubclass storageBehaviorForPropertyWithKey:@"declaredInProtocol"])).to(equal(@(MTLPropertyStoragePermanent)));
+	expect(@([LSMTLStorageBehaviorModelSubclass storageBehaviorForPropertyWithKey:@"shadowedInSubclass"])).to(equal(@(LSMTLPropertyStoragePermanent)));
+	expect(@([LSMTLStorageBehaviorModelSubclass storageBehaviorForPropertyWithKey:@"declaredInProtocol"])).to(equal(@(LSMTLPropertyStoragePermanent)));
 });
 
 it(@"should ignore optional protocol properties not implemented", ^{
-	expect(@([MTLOptionalPropertyModel storageBehaviorForPropertyWithKey:@"optionalUnimplementedProperty"])).to(equal(@(MTLPropertyStorageNone)));
-	expect(@([MTLOptionalPropertyModel storageBehaviorForPropertyWithKey:@"optionalImplementedProperty"])).to(equal(@(MTLPropertyStoragePermanent)));
+	expect(@([LSMTLOptionalPropertyModel storageBehaviorForPropertyWithKey:@"optionalUnimplementedProperty"])).to(equal(@(LSMTLPropertyStorageNone)));
+	expect(@([LSMTLOptionalPropertyModel storageBehaviorForPropertyWithKey:@"optionalImplementedProperty"])).to(equal(@(LSMTLPropertyStoragePermanent)));
 });
 
 describe(@"merging with model subclasses", ^{
-	__block MTLTestModel *superclass;
-	__block MTLSubclassTestModel *subclass;
+	__block LSMTLTestModel *superclass;
+	__block LSMTLSubclassTestModel *subclass;
 
 	beforeEach(^{
-		superclass = [MTLTestModel modelWithDictionary:@{
+		superclass = [LSMTLTestModel modelWithDictionary:@{
 			@"name": @"foo",
 			@"count": @5
 		} error:NULL];
 
 		expect(superclass).notTo(beNil());
 
-		subclass = [MTLSubclassTestModel modelWithDictionary:@{
+		subclass = [LSMTLSubclassTestModel modelWithDictionary:@{
 			@"name": @"bar",
 			@"count": @3,
 			@"generation": @1,

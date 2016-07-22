@@ -1,28 +1,28 @@
 //
-//  MTLModel.m
+//  LSMTLModel.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-11.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSError+MTLModelException.h"
-#import "MTLModel.h"
+#import "NSError+LSMTLModelException.h"
+#import "LSMTLModel.h"
 #import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/EXTScope.h>
-#import "MTLReflection.h"
+#import "LSMTLReflection.h"
 #import <objc/runtime.h>
 
 // Used to cache the reflection performed in +propertyKeys.
-static void *MTLModelCachedPropertyKeysKey = &MTLModelCachedPropertyKeysKey;
+static void *LSMTLModelCachedPropertyKeysKey = &LSMTLModelCachedPropertyKeysKey;
 
 // Associated in +generateAndCachePropertyKeys with a set of all transitory
 // property keys.
-static void *MTLModelCachedTransitoryPropertyKeysKey = &MTLModelCachedTransitoryPropertyKeysKey;
+static void *LSMTLModelCachedTransitoryPropertyKeysKey = &LSMTLModelCachedTransitoryPropertyKeysKey;
 
 // Associated in +generateAndCachePropertyKeys with a set of all permanent
 // property keys.
-static void *MTLModelCachedPermanentPropertyKeysKey = &MTLModelCachedPermanentPropertyKeysKey;
+static void *LSMTLModelCachedPermanentPropertyKeysKey = &LSMTLModelCachedPermanentPropertyKeysKey;
 
 // Validates a value for an object and sets it if necessary.
 //
@@ -38,7 +38,7 @@ static void *MTLModelCachedPermanentPropertyKeysKey = &MTLModelCachedPermanentPr
 //
 // Returns YES if `value` could be validated and set, or NO if an error
 // occurred.
-static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUpdate, NSError **error) {
+static BOOL LSMTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUpdate, NSError **error) {
 	// Mark this as being autoreleased, because validateValue may return
 	// a new object to be stored in this variable (and we don't want ARC to
 	// double-free or leak the old or new values).
@@ -68,22 +68,22 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	}
 }
 
-@interface MTLModel ()
+@interface LSMTLModel ()
 
 // Inspects all properties of returned by +propertyKeys using
 // +storageBehaviorForPropertyWithKey and caches the results.
 + (void)generateAndCacheStorageBehaviors;
 
 // Returns a set of all property keys for which
-// +storageBehaviorForPropertyWithKey returned MTLPropertyStorageTransitory.
+// +storageBehaviorForPropertyWithKey returned LSMTLPropertyStorageTransitory.
 + (NSSet *)transitoryPropertyKeys;
 
 // Returns a set of all property keys for which
-// +storageBehaviorForPropertyWithKey returned MTLPropertyStoragePermanent.
+// +storageBehaviorForPropertyWithKey returned LSMTLPropertyStoragePermanent.
 + (NSSet *)permanentPropertyKeys;
 
 // Enumerates all properties of the receiver's class hierarchy, starting at the
-// receiver, and continuing up until (but not including) MTLModel.
+// receiver, and continuing up until (but not including) LSMTLModel.
 //
 // The given block will be invoked multiple times for any properties declared on
 // multiple classes in the hierarchy.
@@ -91,7 +91,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 
 @end
 
-@implementation MTLModel
+@implementation LSMTLModel
 
 #pragma mark Lifecycle
 
@@ -101,14 +101,14 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 
 	for (NSString *propertyKey in self.propertyKeys) {
 		switch ([self storageBehaviorForPropertyWithKey:propertyKey]) {
-			case MTLPropertyStorageNone:
+			case LSMTLPropertyStorageNone:
 				break;
 
-			case MTLPropertyStorageTransitory:
+			case LSMTLPropertyStorageTransitory:
 				[transitoryKeys addObject:propertyKey];
 				break;
 
-			case MTLPropertyStoragePermanent:
+			case LSMTLPropertyStoragePermanent:
 				[permanentKeys addObject:propertyKey];
 				break;
 		}
@@ -116,8 +116,8 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 
 	// It doesn't really matter if we replace another thread's work, since we do
 	// it atomically and the result should be the same.
-	objc_setAssociatedObject(self, MTLModelCachedTransitoryPropertyKeysKey, transitoryKeys, OBJC_ASSOCIATION_COPY);
-	objc_setAssociatedObject(self, MTLModelCachedPermanentPropertyKeysKey, permanentKeys, OBJC_ASSOCIATION_COPY);
+	objc_setAssociatedObject(self, LSMTLModelCachedTransitoryPropertyKeysKey, transitoryKeys, OBJC_ASSOCIATION_COPY);
+	objc_setAssociatedObject(self, LSMTLModelCachedPermanentPropertyKeysKey, permanentKeys, OBJC_ASSOCIATION_COPY);
 }
 
 + (instancetype)modelWithDictionary:(NSDictionary *)dictionary error:(NSError **)error {
@@ -141,7 +141,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 
 		if ([value isEqual:NSNull.null]) value = nil;
 
-		BOOL success = MTLValidateAndSetValue(self, key, value, YES, error);
+		BOOL success = LSMTLValidateAndSetValue(self, key, value, YES, error);
 		if (!success) return nil;
 	}
 
@@ -154,7 +154,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	Class cls = self;
 	BOOL stop = NO;
 
-	while (!stop && ![cls isEqual:MTLModel.class]) {
+	while (!stop && ![cls isEqual:LSMTLModel.class]) {
 		unsigned count = 0;
 		objc_property_t *properties = class_copyPropertyList(cls, &count);
 
@@ -173,7 +173,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 }
 
 + (NSSet *)propertyKeys {
-	NSSet *cachedKeys = objc_getAssociatedObject(self, MTLModelCachedPropertyKeysKey);
+	NSSet *cachedKeys = objc_getAssociatedObject(self, LSMTLModelCachedPropertyKeysKey);
 	if (cachedKeys != nil) return cachedKeys;
 
 	NSMutableSet *keys = [NSMutableSet set];
@@ -181,35 +181,35 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	[self enumeratePropertiesUsingBlock:^(objc_property_t property, BOOL *stop) {
 		NSString *key = @(property_getName(property));
 
-		if ([self storageBehaviorForPropertyWithKey:key] != MTLPropertyStorageNone) {
+		if ([self storageBehaviorForPropertyWithKey:key] != LSMTLPropertyStorageNone) {
 			 [keys addObject:key];
 		}
 	}];
 
 	// It doesn't really matter if we replace another thread's work, since we do
 	// it atomically and the result should be the same.
-	objc_setAssociatedObject(self, MTLModelCachedPropertyKeysKey, keys, OBJC_ASSOCIATION_COPY);
+	objc_setAssociatedObject(self, LSMTLModelCachedPropertyKeysKey, keys, OBJC_ASSOCIATION_COPY);
 
 	return keys;
 }
 
 + (NSSet *)transitoryPropertyKeys {
-	NSSet *transitoryPropertyKeys = objc_getAssociatedObject(self, MTLModelCachedTransitoryPropertyKeysKey);
+	NSSet *transitoryPropertyKeys = objc_getAssociatedObject(self, LSMTLModelCachedTransitoryPropertyKeysKey);
 
 	if (transitoryPropertyKeys == nil) {
 		[self generateAndCacheStorageBehaviors];
-		transitoryPropertyKeys = objc_getAssociatedObject(self, MTLModelCachedTransitoryPropertyKeysKey);
+		transitoryPropertyKeys = objc_getAssociatedObject(self, LSMTLModelCachedTransitoryPropertyKeysKey);
 	}
 
 	return transitoryPropertyKeys;
 }
 
 + (NSSet *)permanentPropertyKeys {
-	NSSet *permanentPropertyKeys = objc_getAssociatedObject(self, MTLModelCachedPermanentPropertyKeysKey);
+	NSSet *permanentPropertyKeys = objc_getAssociatedObject(self, LSMTLModelCachedPermanentPropertyKeysKey);
 
 	if (permanentPropertyKeys == nil) {
 		[self generateAndCacheStorageBehaviors];
-		permanentPropertyKeys = objc_getAssociatedObject(self, MTLModelCachedPermanentPropertyKeysKey);
+		permanentPropertyKeys = objc_getAssociatedObject(self, LSMTLModelCachedPermanentPropertyKeysKey);
 	}
 
 	return permanentPropertyKeys;
@@ -221,10 +221,10 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	return [self dictionaryWithValuesForKeys:keys.allObjects];
 }
 
-+ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
++ (LSMTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
 	objc_property_t property = class_getProperty(self.class, propertyKey.UTF8String);
 
-	if (property == NULL) return MTLPropertyStorageNone;
+	if (property == NULL) return LSMTLPropertyStorageNone;
 
 	mtl_propertyAttributes *attributes = mtl_copyPropertyAttributes(property);
 	@onExit {
@@ -234,26 +234,26 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	BOOL hasGetter = [self instancesRespondToSelector:attributes->getter];
 	BOOL hasSetter = [self instancesRespondToSelector:attributes->setter];
 	if (!attributes->dynamic && attributes->ivar == NULL && !hasGetter && !hasSetter) {
-		return MTLPropertyStorageNone;
+		return LSMTLPropertyStorageNone;
 	} else if (attributes->readonly && attributes->ivar == NULL) {
-		if ([self isEqual:MTLModel.class]) {
-			return MTLPropertyStorageNone;
+		if ([self isEqual:LSMTLModel.class]) {
+			return LSMTLPropertyStorageNone;
 		} else {
 			// Check superclass in case the subclass redeclares a property that
 			// falls through
 			return [self.superclass storageBehaviorForPropertyWithKey:propertyKey];
 		}
 	} else {
-		return MTLPropertyStoragePermanent;
+		return LSMTLPropertyStoragePermanent;
 	}
 }
 
 #pragma mark Merging
 
-- (void)mergeValueForKey:(NSString *)key fromModel:(NSObject<MTLModel> *)model {
+- (void)mergeValueForKey:(NSString *)key fromModel:(NSObject<LSMTLModel> *)model {
 	NSParameterAssert(key != nil);
 
-	SEL selector = MTLSelectorWithCapitalizedKeyPattern("merge", key, "FromModel:");
+	SEL selector = LSMTLSelectorWithCapitalizedKeyPattern("merge", key, "FromModel:");
 	if (![self respondsToSelector:selector]) {
 		if (model != nil) {
 			[self setValue:[model valueForKey:key] forKey:key];
@@ -263,11 +263,11 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	}
 
 	IMP imp = [self methodForSelector:selector];
-	void (*function)(id, SEL, id<MTLModel>) = (__typeof__(function))imp;
+	void (*function)(id, SEL, id<LSMTLModel>) = (__typeof__(function))imp;
 	function(self, selector, model);
 }
 
-- (void)mergeValuesForKeysFromModel:(id<MTLModel>)model {
+- (void)mergeValuesForKeysFromModel:(id<LSMTLModel>)model {
 	NSSet *propertyKeys = model.class.propertyKeys;
 
 	for (NSString *key in self.class.propertyKeys) {
@@ -283,7 +283,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	for (NSString *key in self.class.propertyKeys) {
 		id value = [self valueForKey:key];
 
-		BOOL success = MTLValidateAndSetValue(self, key, value, NO, error);
+		BOOL success = LSMTLValidateAndSetValue(self, key, value, NO, error);
 		if (!success) return NO;
 	}
 
@@ -293,7 +293,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 #pragma mark NSCopying
 
 - (instancetype)copyWithZone:(NSZone *)zone {
-	MTLModel *copy = [[self.class allocWithZone:zone] init];
+	LSMTLModel *copy = [[self.class allocWithZone:zone] init];
 	[copy setValuesForKeysWithDictionary:self.dictionaryValue];
 	return copy;
 }
@@ -316,7 +316,7 @@ static BOOL MTLValidateAndSetValue(id obj, NSString *key, id value, BOOL forceUp
 	return value;
 }
 
-- (BOOL)isEqual:(MTLModel *)model {
+- (BOOL)isEqual:(LSMTLModel *)model {
 	if (self == model) return YES;
 	if (![model isMemberOfClass:self.class]) return NO;
 

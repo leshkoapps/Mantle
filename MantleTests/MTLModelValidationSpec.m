@@ -1,5 +1,5 @@
 //
-//  MTLModelValidationSpec.m
+//  LSMTLModelValidationSpec.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 7/6/13.
@@ -10,26 +10,26 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-#import "MTLTestModel.h"
+#import "LSMTLTestModel.h"
 
-#import "MTLModel.h"
+#import "LSMTLModel.h"
 
-QuickSpecBegin(MTLModelValidation)
+QuickSpecBegin(LSMTLModelValidation)
 
 it(@"should fail with incorrect values", ^{
-	MTLValidationModel *model = [[MTLValidationModel alloc] init];
+	LSMTLValidationModel *model = [[LSMTLValidationModel alloc] init];
 
 	NSError *error = nil;
 	BOOL success = [model validate:&error];
 	expect(@(success)).to(beFalsy());
 
 	expect(error).notTo(beNil());
-	expect(error.domain).to(equal(MTLTestModelErrorDomain));
-	expect(@(error.code)).to(equal(@(MTLTestModelNameMissing)));
+	expect(error.domain).to(equal(LSMTLTestModelErrorDomain));
+	expect(@(error.code)).to(equal(@(LSMTLTestModelNameMissing)));
 });
 
 it(@"should succeed with correct values", ^{
-	MTLValidationModel *model = [[MTLValidationModel alloc] initWithDictionary:@{ @"name": @"valid" } error:NULL];
+	LSMTLValidationModel *model = [[LSMTLValidationModel alloc] initWithDictionary:@{ @"name": @"valid" } error:NULL];
 
 	NSError *error = nil;
 	BOOL success = [model validate:&error];
@@ -39,7 +39,7 @@ it(@"should succeed with correct values", ^{
 });
 
 it(@"should apply values returned from -validateValue:error:", ^{
-	MTLSelfValidatingModel *model = [[MTLSelfValidatingModel alloc] init];
+	LSMTLSelfValidatingModel *model = [[LSMTLSelfValidatingModel alloc] init];
 
 	NSError *error = nil;
 	BOOL success = [model validate:&error];

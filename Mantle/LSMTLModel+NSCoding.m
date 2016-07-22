@@ -1,21 +1,21 @@
 //
-//  MTLModel+NSCoding.m
+//  LSMTLModel+NSCoding.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-02-12.
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import "MTLModel+NSCoding.h"
+#import "LSMTLModel+NSCoding.h"
 #import <Mantle/EXTRuntimeExtensions.h>
 #import <Mantle/EXTScope.h>
-#import "MTLReflection.h"
+#import "LSMTLReflection.h"
 
 // Used in archives to store the modelVersion of the archived instance.
-static NSString * const MTLModelVersionKey = @"MTLModelVersion";
+static NSString * const LSMTLModelVersionKey = @"LSMTLModelVersion";
 
 // Used to cache the reflection performed in +allowedSecureCodingClassesByPropertyKey.
-static void *MTLModelCachedAllowedClassesKey = &MTLModelCachedAllowedClassesKey;
+static void *LSMTLModelCachedAllowedClassesKey = &LSMTLModelCachedAllowedClassesKey;
 
 // Returns whether the given NSCoder requires secure coding.
 static BOOL coderRequiresSecureCoding(NSCoder *coder) {
@@ -35,7 +35,7 @@ static BOOL coderRequiresSecureCoding(NSCoder *coder) {
 // be excluded from archives).
 static NSSet *encodablePropertyKeysForClass(Class modelClass) {
 	return [[modelClass encodingBehaviorsByPropertyKey] keysOfEntriesPassingTest:^ BOOL (NSString *propertyKey, NSNumber *behavior, BOOL *stop) {
-		return behavior.unsignedIntegerValue != MTLModelEncodingBehaviorExcluded;
+		return behavior.unsignedIntegerValue != LSMTLModelEncodingBehaviorExcluded;
 	}];
 }
 
@@ -52,7 +52,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 	}
 }
 
-@implementation MTLModel (NSCoding)
+@implementation LSMTLModel (NSCoding)
 
 #pragma mark Versioning
 
@@ -75,7 +75,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 			free(attributes);
 		};
 
-		MTLModelEncodingBehavior behavior = (attributes->weak ? MTLModelEncodingBehaviorConditional : MTLModelEncodingBehaviorUnconditional);
+		LSMTLModelEncodingBehavior behavior = (attributes->weak ? LSMTLModelEncodingBehaviorConditional : LSMTLModelEncodingBehaviorUnconditional);
 		behaviors[key] = @(behavior);
 	}
 
@@ -83,12 +83,12 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 }
 
 + (NSDictionary *)allowedSecureCodingClassesByPropertyKey {
-	NSDictionary *cachedClasses = objc_getAssociatedObject(self, MTLModelCachedAllowedClassesKey);
+	NSDictionary *cachedClasses = objc_getAssociatedObject(self, LSMTLModelCachedAllowedClassesKey);
 	if (cachedClasses != nil) return cachedClasses;
 
 	// Get all property keys that could potentially be encoded.
 	NSSet *propertyKeys = [self.encodingBehaviorsByPropertyKey keysOfEntriesPassingTest:^ BOOL (NSString *propertyKey, NSNumber *behavior, BOOL *stop) {
-		return behavior.unsignedIntegerValue != MTLModelEncodingBehaviorExcluded;
+		return behavior.unsignedIntegerValue != LSMTLModelEncodingBehaviorExcluded;
 	}];
 
 	NSMutableDictionary *allowedClasses = [[NSMutableDictionary alloc] initWithCapacity:propertyKeys.count];
@@ -117,7 +117,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 
 	// It doesn't really matter if we replace another thread's work, since we do
 	// it atomically and the result should be the same.
-	objc_setAssociatedObject(self, MTLModelCachedAllowedClassesKey, allowedClasses, OBJC_ASSOCIATION_COPY);
+	objc_setAssociatedObject(self, LSMTLModelCachedAllowedClassesKey, allowedClasses, OBJC_ASSOCIATION_COPY);
 
 	return allowedClasses;
 }
@@ -126,7 +126,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 	NSParameterAssert(key != nil);
 	NSParameterAssert(coder != nil);
 
-	SEL selector = MTLSelectorWithCapitalizedKeyPattern("decode", key, "WithCoder:modelVersion:");
+	SEL selector = LSMTLSelectorWithCapitalizedKeyPattern("decode", key, "WithCoder:modelVersion:");
 	if ([self respondsToSelector:selector]) {
 		IMP imp = [self methodForSelector:selector];
 		id (*function)(id, SEL, NSCoder *, NSUInteger) = (__typeof__(function))imp;
@@ -156,9 +156,9 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 	BOOL requiresSecureCoding = coderRequiresSecureCoding(coder);
 	NSNumber *version = nil;
 	if (requiresSecureCoding) {
-		version = [coder decodeObjectOfClass:NSNumber.class forKey:MTLModelVersionKey];
+		version = [coder decodeObjectOfClass:NSNumber.class forKey:LSMTLModelVersionKey];
 	} else {
-		version = [coder decodeObjectForKey:MTLModelVersionKey];
+		version = [coder decodeObjectForKey:LSMTLModelVersionKey];
 	}
 	
 	if (version == nil) {
@@ -174,7 +174,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 		// Handle the old archive format.
 		NSDictionary *externalRepresentation = [coder decodeObjectForKey:@"externalRepresentation"];
 		if (externalRepresentation != nil) {
-			NSAssert([self.class methodForSelector:@selector(dictionaryValueFromArchivedExternalRepresentation:version:)] != [MTLModel methodForSelector:@selector(dictionaryValueFromArchivedExternalRepresentation:version:)], @"Decoded an old archive of %@ that contains an externalRepresentation, but +dictionaryValueFromArchivedExternalRepresentation:version: is not overridden to handle it", self.class);
+			NSAssert([self.class methodForSelector:@selector(dictionaryValueFromArchivedExternalRepresentation:version:)] != [LSMTLModel methodForSelector:@selector(dictionaryValueFromArchivedExternalRepresentation:version:)], @"Decoded an old archive of %@ that contains an externalRepresentation, but +dictionaryValueFromArchivedExternalRepresentation:version: is not overridden to handle it", self.class);
 
 			NSDictionary *dictionaryValue = [self.class dictionaryValueFromArchivedExternalRepresentation:externalRepresentation version:version.unsignedIntegerValue];
 			if (dictionaryValue == nil) return nil;
@@ -207,7 +207,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 - (void)encodeWithCoder:(NSCoder *)coder {
 	if (coderRequiresSecureCoding(coder)) verifyAllowedClassesByPropertyKey(self.class);
 
-	[coder encodeObject:@(self.class.modelVersion) forKey:MTLModelVersionKey];
+	[coder encodeObject:@(self.class.modelVersion) forKey:LSMTLModelVersionKey];
 
 	NSDictionary *encodingBehaviors = self.class.encodingBehaviorsByPropertyKey;
 	[self.dictionaryValue enumerateKeysAndObjectsUsingBlock:^(NSString *key, id value, BOOL *stop) {
@@ -217,14 +217,14 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 			
 			switch ([encodingBehaviors[key] unsignedIntegerValue]) {
 					// This will also match a nil behavior.
-				case MTLModelEncodingBehaviorExcluded:
+				case LSMTLModelEncodingBehaviorExcluded:
 					break;
 					
-				case MTLModelEncodingBehaviorUnconditional:
+				case LSMTLModelEncodingBehaviorUnconditional:
 					[coder encodeObject:value forKey:key];
 					break;
 					
-				case MTLModelEncodingBehaviorConditional:
+				case LSMTLModelEncodingBehaviorConditional:
 					[coder encodeConditionalObject:value forKey:key];
 					break;
 					
@@ -252,7 +252,7 @@ static void verifyAllowedClassesByPropertyKey(Class modelClass) {
 
 @end
 
-@implementation MTLModel (OldArchiveSupport)
+@implementation LSMTLModel (OldArchiveSupport)
 
 + (NSDictionary *)dictionaryValueFromArchivedExternalRepresentation:(NSDictionary *)externalRepresentation version:(NSUInteger)fromVersion {
 	return nil;

@@ -1,5 +1,5 @@
 //
-//  MTLTransformerErrorHandling.h
+//  LSMTLTransformerErrorHandling.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/6/13.
@@ -8,28 +8,28 @@
 
 #import <Foundation/Foundation.h>
 
-/// The domain for errors originating from the MTLTransformerErrorHandling
+/// The domain for errors originating from the LSMTLTransformerErrorHandling
 /// protocol.
 ///
 /// Transformers conforming to this protocol are expected to use this error
 /// domain if the transformation fails.
-extern NSString * const MTLTransformerErrorHandlingErrorDomain;
+extern NSString * const LSMTLTransformerErrorHandlingErrorDomain;
 
 /// Used to indicate that the input value was illegal.
 ///
 /// Transformers conforming to this protocol are expected to use this error code
 /// if the transformation fails due to an invalid input value.
-extern const NSInteger MTLTransformerErrorHandlingErrorInvalidInput;
+extern const NSInteger LSMTLTransformerErrorHandlingErrorInvalidInput;
 
 /// Associated with the invalid input value.
 ///
 /// Transformers conforming to this protocol are expected to associate this key
 /// with the invalid input in the userInfo dictionary.
-extern NSString * const MTLTransformerErrorHandlingInputValueErrorKey;
+extern NSString * const LSMTLTransformerErrorHandlingInputValueErrorKey;
 
 /// This protocol can be implemented by NSValueTransformer subclasses to
 /// communicate errors that occur during transformation.
-@protocol MTLTransformerErrorHandling <NSObject>
+@protocol LSMTLTransformerErrorHandling <NSObject>
 @required
 
 /// Transforms a value, returning any error that occurred during transformation.

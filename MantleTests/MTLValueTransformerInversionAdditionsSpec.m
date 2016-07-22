@@ -1,5 +1,5 @@
 //
-//  MTLValueTransformerInversionAdditionsSpec.m
+//  LSMTLValueTransformerInversionAdditionsSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-05-18.
@@ -33,7 +33,7 @@
 
 @end
 
-QuickSpecBegin(MTLValueTransformerInversionAdditions)
+QuickSpecBegin(LSMTLValueTransformerInversionAdditions)
 
 __block TestTransformer *transformer;
 

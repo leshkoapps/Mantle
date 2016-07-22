@@ -1,5 +1,5 @@
 //
-//  MTLErrorModelExceptionSpec.m
+//  LSMTLErrorModelExceptionSpec.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 7/6/13.
@@ -10,13 +10,13 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-#import "NSError+MTLModelException.h"
+#import "NSError+LSMTLModelException.h"
 
-QuickSpecBegin(MTLErrorModelException)
+QuickSpecBegin(LSMTLErrorModelException)
 
 describe(@"+mtl_modelErrorWithException:", ^{
 	it(@"should return a new error for that exception", ^{
-		NSException *exception = [NSException exceptionWithName:@"MTLTestException" reason:@"Just Testing" userInfo:nil];
+		NSException *exception = [NSException exceptionWithName:@"LSMTLTestException" reason:@"Just Testing" userInfo:nil];
 
 		NSError *error = [NSError mtl_modelErrorWithException:exception];
 

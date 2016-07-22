@@ -1,14 +1,14 @@
 //
-//  NSDictionary+MTLManipulationAdditions.m
+//  NSDictionary+LSMTLManipulationAdditions.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-24.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSDictionary+MTLManipulationAdditions.h"
+#import "NSDictionary+LSMTLManipulationAdditions.h"
 
-@implementation NSDictionary (MTLManipulationAdditions)
+@implementation NSDictionary (LSMTLManipulationAdditions)
 
 - (NSDictionary *)mtl_dictionaryByAddingEntriesFromDictionary:(NSDictionary *)dictionary {
 	NSMutableDictionary *result = [self mutableCopy];
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation NSDictionary (MTLManipulationAdditions_Deprecated)
+@implementation NSDictionary (LSMTLManipulationAdditions_Deprecated)
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated"

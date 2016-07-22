@@ -1,5 +1,5 @@
 //
-//  MTLDictionaryMappingSpec.m
+//  LSMTLDictionaryMappingSpec.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/23/13.
@@ -8,11 +8,11 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
-#import "MTLTestModel.h"
+#import "LSMTLTestModel.h"
 
-#import "NSDictionary+MTLMappingAdditions.h"
+#import "NSDictionary+LSMTLMappingAdditions.h"
 
-QuickSpecBegin(MTLDictionaryMappingAdditions)
+QuickSpecBegin(LSMTLDictionaryMappingAdditions)
 
 it(@"should return a mapping", ^{
 	NSDictionary *mapping = @{
@@ -22,7 +22,7 @@ it(@"should return a mapping", ^{
 		@"weakModel": @"weakModel"
 	};
 
-	expect([NSDictionary mtl_identityPropertyMapWithModel:MTLTestModel.class]).to(equal(mapping));
+	expect([NSDictionary mtl_identityPropertyMapWithModel:LSMTLTestModel.class]).to(equal(mapping));
 });
 
 QuickSpecEnd

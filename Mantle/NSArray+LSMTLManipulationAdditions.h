@@ -1,5 +1,5 @@
 //
-//  NSArray+MTLManipulationAdditions.h
+//  NSArray+LSMTLManipulationAdditions.h
 //  Mantle
 //
 //  Created by Josh Abernathy on 9/19/12.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSArray (MTLManipulationAdditions)
+@interface NSArray (LSMTLManipulationAdditions)
 
 /// The first object in the array or nil if the array is empty.
 /// Forwards to `firstObject` which has been first declared in iOS7, but works with iOS4/10.6.

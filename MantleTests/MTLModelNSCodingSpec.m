@@ -1,5 +1,5 @@
 //
-//  MTLModelNSCodingSpec.m
+//  LSMTLModelNSCodingSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-02-13.
@@ -10,27 +10,27 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-#import "MTLTestModel.h"
+#import "LSMTLTestModel.h"
 
-QuickSpecBegin(MTLModelNSCoding)
+QuickSpecBegin(LSMTLModelNSCoding)
 
 it(@"should have default encoding behaviors", ^{
-	NSDictionary *behaviors = MTLTestModel.encodingBehaviorsByPropertyKey;
+	NSDictionary *behaviors = LSMTLTestModel.encodingBehaviorsByPropertyKey;
 	expect(behaviors).notTo(beNil());
 
-	expect(behaviors[@"name"]).to(equal(@(MTLModelEncodingBehaviorUnconditional)));
-	expect(behaviors[@"count"]).to(equal(@(MTLModelEncodingBehaviorUnconditional)));
-	expect(behaviors[@"weakModel"]).to(equal(@(MTLModelEncodingBehaviorConditional)));
+	expect(behaviors[@"name"]).to(equal(@(LSMTLModelEncodingBehaviorUnconditional)));
+	expect(behaviors[@"count"]).to(equal(@(LSMTLModelEncodingBehaviorUnconditional)));
+	expect(behaviors[@"weakModel"]).to(equal(@(LSMTLModelEncodingBehaviorConditional)));
 	expect(behaviors[@"dynamicName"]).to(beNil());
 });
 
 it(@"should have default allowed classes", ^{
-	NSDictionary *allowedClasses = MTLTestModel.allowedSecureCodingClassesByPropertyKey;
+	NSDictionary *allowedClasses = LSMTLTestModel.allowedSecureCodingClassesByPropertyKey;
 	expect(allowedClasses).notTo(beNil());
 
 	expect(allowedClasses[@"name"]).to(equal(@[ NSString.class ]));
 	expect(allowedClasses[@"count"]).to(equal(@[ NSValue.class ]));
-	expect(allowedClasses[@"weakModel"]).to(equal(@[ MTLEmptyTestModel.class ]));
+	expect(allowedClasses[@"weakModel"]).to(equal(@[ LSMTLEmptyTestModel.class ]));
 
 	// Not encoded into archives.
 	expect(allowedClasses[@"nestedName"]).to(beNil());
@@ -38,18 +38,18 @@ it(@"should have default allowed classes", ^{
 });
 
 it(@"should default to version 0", ^{
-	expect(@(MTLEmptyTestModel.modelVersion)).to(equal(@0));
+	expect(@(LSMTLEmptyTestModel.modelVersion)).to(equal(@0));
 });
 
 describe(@"archiving", ^{
-	__block MTLEmptyTestModel *emptyModel;
-	__block MTLTestModel *model;
+	__block LSMTLEmptyTestModel *emptyModel;
+	__block LSMTLTestModel *model;
 	__block NSDictionary *values;
 
-	__block MTLTestModel * (^archiveAndUnarchiveModel)(void);
+	__block LSMTLTestModel * (^archiveAndUnarchiveModel)(void);
 
 	beforeEach(^{
-		emptyModel = [[MTLEmptyTestModel alloc] init];
+		emptyModel = [[LSMTLEmptyTestModel alloc] init];
 		expect(emptyModel).notTo(beNil());
 
 		values = @{
@@ -58,7 +58,7 @@ describe(@"archiving", ^{
 		};
 
 		NSError *error = nil;
-		model = [[MTLTestModel alloc] initWithDictionary:values error:&error];
+		model = [[LSMTLTestModel alloc] initWithDictionary:values error:&error];
 		expect(model).notTo(beNil());
 		expect(error).to(beNil());
 
@@ -66,7 +66,7 @@ describe(@"archiving", ^{
 			NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
 			expect(data).notTo(beNil());
 
-			MTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+			LSMTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 			expect(unarchivedModel).notTo(beNil());
 
 			return unarchivedModel;
@@ -80,7 +80,7 @@ describe(@"archiving", ^{
 	it(@"should not archive excluded properties", ^{
 		model.nestedName = @"foobar";
 
-		MTLTestModel *unarchivedModel = archiveAndUnarchiveModel();
+		LSMTLTestModel *unarchivedModel = archiveAndUnarchiveModel();
 		expect(unarchivedModel.nestedName).to(beNil());
 		expect(unarchivedModel).notTo(equal(model));
 
@@ -91,7 +91,7 @@ describe(@"archiving", ^{
 	it(@"should not archive conditional properties if not encoded elsewhere", ^{
 		model.weakModel = emptyModel;
 
-		MTLTestModel *unarchivedModel = archiveAndUnarchiveModel();
+		LSMTLTestModel *unarchivedModel = archiveAndUnarchiveModel();
 		expect(unarchivedModel.weakModel).to(beNil());
 	});
 
@@ -105,30 +105,30 @@ describe(@"archiving", ^{
 		expect(@(objects.count)).to(equal(@2));
 		expect(objects[1]).to(equal(emptyModel));
 
-		MTLTestModel *unarchivedModel = objects[0];
+		LSMTLTestModel *unarchivedModel = objects[0];
 		expect(unarchivedModel).to(equal(model));
 		expect(unarchivedModel.weakModel).to(equal(emptyModel));
 	});
 
 	it(@"should invoke custom decoding logic", ^{
-		MTLTestModel.modelVersion = 0;
+		LSMTLTestModel.modelVersion = 0;
 
 		NSData *data = [NSKeyedArchiver archivedDataWithRootObject:model];
 		expect(data).notTo(beNil());
 
-		MTLTestModel.modelVersion = 1;
+		LSMTLTestModel.modelVersion = 1;
 
-		MTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+		LSMTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithData:data];
 		expect(unarchivedModel).notTo(beNil());
 		expect(unarchivedModel.name).to(equal(@"M: foobar"));
 		expect(@(unarchivedModel.count)).to(equal(@5));
 	});
 
 	it(@"should unarchive an external representation from the old model format", ^{
-		NSURL *archiveURL = [[NSBundle bundleForClass:self.class] URLForResource:@"MTLTestModel-OldArchive" withExtension:@"plist"];
+		NSURL *archiveURL = [[NSBundle bundleForClass:self.class] URLForResource:@"LSMTLTestModel-OldArchive" withExtension:@"plist"];
 		expect(archiveURL).notTo(beNil());
 
-		MTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithFile:archiveURL.path];
+		LSMTLTestModel *unarchivedModel = [NSKeyedUnarchiver unarchiveObjectWithFile:archiveURL.path];
 		expect(unarchivedModel).notTo(beNil());
 
 		NSDictionary *expectedValues = @{

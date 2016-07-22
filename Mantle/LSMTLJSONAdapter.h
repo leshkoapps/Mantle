@@ -1,5 +1,5 @@
 //
-//  MTLJSONAdapter.h
+//  LSMTLJSONAdapter.h
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-02-12.
@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol MTLModel;
-@protocol MTLTransformerErrorHandling;
+@protocol LSMTLModel;
+@protocol LSMTLTransformerErrorHandling;
 
-/// A MTLModel object that supports being parsed from and serialized to JSON.
-@protocol MTLJSONSerializing <MTLModel>
+/// A LSMTLModel object that supports being parsed from and serialized to JSON.
+@protocol LSMTLJSONSerializing <LSMTLModel>
 @required
 
 /// Specifies how to map property keys to different key paths in JSON.
@@ -56,7 +56,7 @@
 /// reversible, the transformer will also be used to convert the property value
 /// back to JSON.
 ///
-/// If the receiver implements a `+<key>JSONTransformer` method, MTLJSONAdapter
+/// If the receiver implements a `+<key>JSONTransformer` method, LSMTLJSONAdapter
 /// will use the result of that method instead.
 ///
 /// Returns a value transformer, or nil if no transformation should be performed.
@@ -66,7 +66,7 @@
 /// in the provided dictionary.
 ///
 /// This is mostly useful for class clusters, where the abstract base class would
-/// be passed into -[MTLJSONAdapter initWithJSONDictionary:modelClass:], but
+/// be passed into -[LSMTLJSONAdapter initWithJSONDictionary:modelClass:], but
 /// a subclass should be instantiated instead.
 ///
 /// JSONDictionary - The JSON dictionary that will be parsed.
@@ -77,26 +77,26 @@
 
 @end
 
-/// The domain for errors originating from MTLJSONAdapter.
-extern NSString * const MTLJSONAdapterErrorDomain;
+/// The domain for errors originating from LSMTLJSONAdapter.
+extern NSString * const LSMTLJSONAdapterErrorDomain;
 
 /// +classForParsingJSONDictionary: returned nil for the given dictionary.
-extern const NSInteger MTLJSONAdapterErrorNoClassFound;
+extern const NSInteger LSMTLJSONAdapterErrorNoClassFound;
 
 /// The provided JSONDictionary is not valid.
-extern const NSInteger MTLJSONAdapterErrorInvalidJSONDictionary;
+extern const NSInteger LSMTLJSONAdapterErrorInvalidJSONDictionary;
 
 /// The model's implementation of +JSONKeyPathsByPropertyKey included a key which
 /// does not actually exist in +propertyKeys.
-extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
+extern const NSInteger LSMTLJSONAdapterErrorInvalidJSONMapping;
 
-/// Converts a MTLModel object to and from a JSON dictionary.
-@interface MTLJSONAdapter : NSObject
+/// Converts a LSMTLModel object to and from a JSON dictionary.
+@interface LSMTLJSONAdapter : NSObject
 
 /// Attempts to parse a JSON dictionary into a model object.
 ///
-/// modelClass     - The MTLModel subclass to attempt to parse from the JSON.
-///                  This class must conform to <MTLJSONSerializing>. This
+/// modelClass     - The LSMTLModel subclass to attempt to parse from the JSON.
+///                  This class must conform to <LSMTLJSONSerializing>. This
 ///                  argument must not be nil.
 /// JSONDictionary - A dictionary representing JSON data. This should match the
 ///                  format returned by NSJSONSerialization. If this argument is
@@ -111,8 +111,8 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 /// Attempts to parse an array of JSON dictionary objects into a model objects
 /// of a specific class.
 ///
-/// modelClass - The MTLModel subclass to attempt to parse from the JSON. This
-///              class must conform to <MTLJSONSerializing>. This argument must
+/// modelClass - The LSMTLModel subclass to attempt to parse from the JSON. This
+///              class must conform to <LSMTLJSONSerializing>. This argument must
 ///              not be nil.
 /// JSONArray  - A array of dictionaries representing JSON data. This should
 ///              match the format returned by NSJSONSerialization. If this
@@ -133,7 +133,7 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 ///         serializing.
 ///
 /// Returns a JSON dictionary, or nil if a serialization error occurred.
-+ (NSDictionary *)JSONDictionaryFromModel:(id<MTLJSONSerializing>)model error:(NSError **)error;
++ (NSDictionary *)JSONDictionaryFromModel:(id<LSMTLJSONSerializing>)model error:(NSError **)error;
 
 /// Converts a array of models into a JSON representation.
 ///
@@ -148,8 +148,8 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 
 /// Initializes the receiver with a given model class.
 ///
-/// modelClass - The MTLModel subclass to attempt to parse from the JSON and
-///              back. This class must conform to <MTLJSONSerializing>. This
+/// modelClass - The LSMTLModel subclass to attempt to parse from the JSON and
+///              back. This class must conform to <LSMTLJSONSerializing>. This
 ///              argument must not be nil.
 ///
 /// Returns an initialized adapter.
@@ -178,7 +178,7 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 ///         serializing.
 ///
 /// Returns a model object, or nil if a serialization error occurred.
-- (NSDictionary *)JSONDictionaryFromModel:(id<MTLJSONSerializing>)model error:(NSError **)error;
+- (NSDictionary *)JSONDictionaryFromModel:(id<LSMTLJSONSerializing>)model error:(NSError **)error;
 
 /// Filters the property keys used to serialize a given model.
 ///
@@ -193,7 +193,7 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 ///
 /// Returns a subset of propertyKeys that should be serialized for a given
 /// model.
-- (NSSet *)serializablePropertyKeys:(NSSet *)propertyKeys forModel:(id<MTLJSONSerializing>)model;
+- (NSSet *)serializablePropertyKeys:(NSSet *)propertyKeys forModel:(id<LSMTLJSONSerializing>)model;
 
 /// An optional value transformer that should be used for properties of the given
 /// class.
@@ -218,7 +218,7 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 /// +transformerForModelPropertiesOfClass: is used instead.
 ///
 /// The default implementation transforms properties that match @encode(BOOL)
-/// using the MTLBooleanValueTransformerName transformer.
+/// using the LSMTLBooleanValueTransformerName transformer.
 ///
 /// objCType - The type encoding for the value of this property. This is the type
 ///            as it would be returned by the @encode() directive.
@@ -228,50 +228,50 @@ extern const NSInteger MTLJSONAdapterErrorInvalidJSONMapping;
 
 @end
 
-@interface MTLJSONAdapter (ValueTransformers)
+@interface LSMTLJSONAdapter (ValueTransformers)
 
-/// Creates a reversible transformer to convert a JSON dictionary into a MTLModel
+/// Creates a reversible transformer to convert a JSON dictionary into a LSMTLModel
 /// object, and vice-versa.
 ///
-/// modelClass - The MTLModel subclass to attempt to parse from the JSON. This
-///              class must conform to <MTLJSONSerializing>. This argument must
+/// modelClass - The LSMTLModel subclass to attempt to parse from the JSON. This
+///              class must conform to <LSMTLJSONSerializing>. This argument must
 ///              not be nil.
 ///
 /// Returns a reversible transformer which uses the class of the receiver for
 /// transforming values back and forth.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)dictionaryTransformerWithModelClass:(Class)modelClass;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)dictionaryTransformerWithModelClass:(Class)modelClass;
 
 /// Creates a reversible transformer to convert an array of JSON dictionaries
-/// into an array of MTLModel objects, and vice-versa.
+/// into an array of LSMTLModel objects, and vice-versa.
 ///
-/// modelClass - The MTLModel subclass to attempt to parse from each JSON
-///              dictionary. This class must conform to <MTLJSONSerializing>.
+/// modelClass - The LSMTLModel subclass to attempt to parse from each JSON
+///              dictionary. This class must conform to <LSMTLJSONSerializing>.
 ///              This argument must not be nil.
 ///
 /// Returns a reversible transformer which uses the class of the receiver for
 /// transforming array elements back and forth.
-+ (NSValueTransformer<MTLTransformerErrorHandling> *)arrayTransformerWithModelClass:(Class)modelClass;
++ (NSValueTransformer<LSMTLTransformerErrorHandling> *)arrayTransformerWithModelClass:(Class)modelClass;
 
-/// This value transformer is used by MTLJSONAdapter to automatically convert
+/// This value transformer is used by LSMTLJSONAdapter to automatically convert
 /// NSURL properties to JSON strings and vice versa.
 + (NSValueTransformer *)NSURLJSONTransformer;
 
 @end
 
-@class MTLModel;
+@class LSMTLModel;
 
-@interface MTLJSONAdapter (Deprecated)
+@interface LSMTLJSONAdapter (Deprecated)
 
-@property (nonatomic, strong, readonly) id<MTLJSONSerializing> model __attribute__((unavailable("Replaced by -modelFromJSONDictionary:error:")));
+@property (nonatomic, strong, readonly) id<LSMTLJSONSerializing> model __attribute__((unavailable("Replaced by -modelFromJSONDictionary:error:")));
 
 + (NSArray *)JSONArrayFromModels:(NSArray *)models __attribute__((deprecated("Replaced by +JSONArrayFromModels:error:")));
 
-+ (NSDictionary *)JSONDictionaryFromModel:(MTLModel<MTLJSONSerializing> *)model __attribute__((deprecated("Replaced by +JSONDictionaryFromModel:error:")));
++ (NSDictionary *)JSONDictionaryFromModel:(LSMTLModel<LSMTLJSONSerializing> *)model __attribute__((deprecated("Replaced by +JSONDictionaryFromModel:error:")));
 
 - (NSDictionary *)JSONDictionary __attribute__((unavailable("Replaced by -JSONDictionaryFromModel:error:")));
 - (NSString *)JSONKeyPathForPropertyKey:(NSString *)key __attribute__((unavailable("Replaced by -serializablePropertyKeys:forModel:")));
 - (id)initWithJSONDictionary:(NSDictionary *)JSONDictionary modelClass:(Class)modelClass error:(NSError **)error __attribute__((unavailable("Replaced by -initWithModelClass:")));
-- (id)initWithModel:(id<MTLJSONSerializing>)model __attribute__((unavailable("Replaced by -initWithModelClass:")));
+- (id)initWithModel:(id<LSMTLJSONSerializing>)model __attribute__((unavailable("Replaced by -initWithModelClass:")));
 - (NSDictionary *)serializeToJSONDictionary:(NSError **)error __attribute__((unavailable("Replaced by -JSONDictionaryFromModel:error:")));
 
 @end

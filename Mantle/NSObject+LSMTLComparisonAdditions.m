@@ -1,5 +1,5 @@
 //
-//  NSObject+MTLComparisonAdditions.h
+//  NSObject+LSMTLComparisonAdditions.m
 //  Mantle
 //
 //  Created by Josh Vera on 10/26/12.
@@ -9,7 +9,8 @@
 //  See the LICENSE file for more information.
 //
 
-#import <Foundation/Foundation.h>
+#import "NSObject+LSMTLComparisonAdditions.h"
 
-/// Returns whether both objects are identical or equal via -isEqual:
-BOOL MTLEqualObjects(id obj1, id obj2);
+BOOL LSMTLEqualObjects(id obj1, id obj2) {
+	return (obj1 == obj2 || [obj1 isEqual:obj2]);
+}

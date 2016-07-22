@@ -1,15 +1,15 @@
 //
-//  MTLReflection.m
+//  LSMTLReflection.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-03-12.
 //  Copyright (c) 2013 GitHub. All rights reserved.
 //
 
-#import "MTLReflection.h"
+#import "LSMTLReflection.h"
 #import <objc/runtime.h>
 
-SEL MTLSelectorWithKeyPattern(NSString *key, const char *suffix) {
+SEL LSMTLSelectorWithKeyPattern(NSString *key, const char *suffix) {
 	NSUInteger keyLength = [key maximumLengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	NSUInteger suffixLength = strlen(suffix);
 
@@ -24,7 +24,7 @@ SEL MTLSelectorWithKeyPattern(NSString *key, const char *suffix) {
 	return sel_registerName(selector);
 }
 
-SEL MTLSelectorWithCapitalizedKeyPattern(const char *prefix, NSString *key, const char *suffix) {
+SEL LSMTLSelectorWithCapitalizedKeyPattern(const char *prefix, NSString *key, const char *suffix) {
 	NSUInteger prefixLength = strlen(prefix);
 	NSUInteger suffixLength = strlen(suffix);
 

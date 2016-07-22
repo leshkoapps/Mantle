@@ -1,5 +1,5 @@
 //
-//  MTLReflection.h
+//  LSMTLReflection.h
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2013-03-12.
@@ -16,7 +16,7 @@
 ///
 /// Returns a selector, or NULL if the input strings cannot form a valid
 /// selector.
-SEL MTLSelectorWithKeyPattern(NSString *key, const char *suffix) __attribute__((pure, nonnull(1, 2)));
+SEL LSMTLSelectorWithKeyPattern(NSString *key, const char *suffix) __attribute__((pure, nonnull(1, 2)));
 
 /// Creates a selector from a key and a constant prefix and suffix.
 ///
@@ -28,4 +28,4 @@ SEL MTLSelectorWithKeyPattern(NSString *key, const char *suffix) __attribute__((
 ///
 /// Returns a selector, or NULL if the input strings cannot form a valid
 /// selector.
-SEL MTLSelectorWithCapitalizedKeyPattern(const char *prefix, NSString *key, const char *suffix) __attribute__((pure, nonnull(1, 2, 3)));
+SEL LSMTLSelectorWithCapitalizedKeyPattern(const char *prefix, NSString *key, const char *suffix) __attribute__((pure, nonnull(1, 2, 3)));

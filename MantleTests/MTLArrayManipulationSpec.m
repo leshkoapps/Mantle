@@ -1,5 +1,5 @@
 //
-//  MTLArrayManipulationSpec.m
+//  LSMTLArrayManipulationSpec.m
 //  Mantle
 //
 //  Created by Josh Abernathy on 9/19/12.
@@ -10,7 +10,7 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-QuickSpecBegin(MTLArrayManipulationAdditions)
+QuickSpecBegin(LSMTLArrayManipulationAdditions)
 
 describe(@"-mtl_firstObject", ^{
 	it(@"should return the first object", ^{

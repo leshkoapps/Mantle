@@ -1,5 +1,5 @@
 //
-//  MTLTransformerErrorExamples.m
+//  LSMTLTransformerErrorExamples.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/9/13.
@@ -8,30 +8,30 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
-#import "MTLTransformerErrorExamples.h"
+#import "LSMTLTransformerErrorExamples.h"
 
-#import "MTLTransformerErrorHandling.h"
+#import "LSMTLTransformerErrorHandling.h"
 
-NSString * const MTLTransformerErrorExamples = @"MTLTransformerErrorExamples";
+NSString * const LSMTLTransformerErrorExamples = @"LSMTLTransformerErrorExamples";
 
-NSString * const MTLTransformerErrorExamplesTransformer = @"MTLTransformerErrorExamplesTransformer";
-NSString * const MTLTransformerErrorExamplesInvalidTransformationInput = @"MTLTransformerErrorExamplesInvalidTransformationInput";
-NSString * const MTLTransformerErrorExamplesInvalidReverseTransformationInput = @"MTLTransformerErrorExamplesInvalidReverseTransformationInput";
+NSString * const LSMTLTransformerErrorExamplesTransformer = @"LSMTLTransformerErrorExamplesTransformer";
+NSString * const LSMTLTransformerErrorExamplesInvalidTransformationInput = @"LSMTLTransformerErrorExamplesInvalidTransformationInput";
+NSString * const LSMTLTransformerErrorExamplesInvalidReverseTransformationInput = @"LSMTLTransformerErrorExamplesInvalidReverseTransformationInput";
 
-QuickConfigurationBegin(MTLTransformerErrorExamplesConfiguration)
+QuickConfigurationBegin(LSMTLTransformerErrorExamplesConfiguration)
 
 + (void)configure:(Configuration *)configuration {
-	sharedExamples(MTLTransformerErrorExamples, ^(QCKDSLSharedExampleContext data) {
-		__block NSValueTransformer<MTLTransformerErrorHandling> *transformer;
+	sharedExamples(LSMTLTransformerErrorExamples, ^(QCKDSLSharedExampleContext data) {
+		__block NSValueTransformer<LSMTLTransformerErrorHandling> *transformer;
 		__block id invalidTransformationInput;
 		__block id invalidReverseTransformationInput;
 
 		beforeEach(^{
-			transformer = data()[MTLTransformerErrorExamplesTransformer];
-			invalidTransformationInput = data()[MTLTransformerErrorExamplesInvalidTransformationInput];
-			invalidReverseTransformationInput = data()[MTLTransformerErrorExamplesInvalidReverseTransformationInput];
+			transformer = data()[LSMTLTransformerErrorExamplesTransformer];
+			invalidTransformationInput = data()[LSMTLTransformerErrorExamplesInvalidTransformationInput];
+			invalidReverseTransformationInput = data()[LSMTLTransformerErrorExamplesInvalidReverseTransformationInput];
 
-			expect(@([transformer conformsToProtocol:@protocol(MTLTransformerErrorHandling)])).to(beTruthy());
+			expect(@([transformer conformsToProtocol:@protocol(LSMTLTransformerErrorHandling)])).to(beTruthy());
 		});
 
 		it(@"should return errors occurring during transformation", ^{
@@ -41,9 +41,9 @@ QuickConfigurationBegin(MTLTransformerErrorExamplesConfiguration)
 			expect([transformer transformedValue:invalidTransformationInput success:&success error:&error]).to(beNil());
 			expect(@(success)).to(beFalsy());
 			expect(error).notTo(beNil());
-			expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-			expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-			expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(invalidTransformationInput));
+			expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+			expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+			expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(invalidTransformationInput));
 		});
 
 		it(@"should return errors occurring during reverse transformation", ^{
@@ -55,9 +55,9 @@ QuickConfigurationBegin(MTLTransformerErrorExamplesConfiguration)
 			expect([transformer reverseTransformedValue:invalidReverseTransformationInput success:&success error:&error]).to(beNil());
 			expect(@(success)).to(beFalsy());
 			expect(error).notTo(beNil());
-			expect(error.domain).to(equal(MTLTransformerErrorHandlingErrorDomain));
-			expect(@(error.code)).to(equal(@(MTLTransformerErrorHandlingErrorInvalidInput)));
-			expect(error.userInfo[MTLTransformerErrorHandlingInputValueErrorKey]).to(equal(invalidReverseTransformationInput));
+			expect(error.domain).to(equal(LSMTLTransformerErrorHandlingErrorDomain));
+			expect(@(error.code)).to(equal(@(LSMTLTransformerErrorHandlingErrorInvalidInput)));
+			expect(error.userInfo[LSMTLTransformerErrorHandlingInputValueErrorKey]).to(equal(invalidReverseTransformationInput));
 		});
 	});
 }

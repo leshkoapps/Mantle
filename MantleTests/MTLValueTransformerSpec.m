@@ -1,5 +1,5 @@
 //
-//  MTLValueTransformerSpec.m
+//  LSMTLValueTransformerSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-11.
@@ -10,10 +10,10 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-QuickSpecBegin(MTLValueTransformerSpec)
+QuickSpecBegin(LSMTLValueTransformerSpec)
 
 it(@"should return a forward transformer with a block", ^{
-	MTLValueTransformer *transformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
+	LSMTLValueTransformer *transformer = [LSMTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
 		return [str stringByAppendingString:@"bar"];
 	}];
 
@@ -25,7 +25,7 @@ it(@"should return a forward transformer with a block", ^{
 });
 
 it(@"should return a reversible transformer with a block", ^{
-	MTLValueTransformer *transformer = [MTLValueTransformer transformerUsingReversibleBlock:^(NSString *str, BOOL *success, NSError **error) {
+	LSMTLValueTransformer *transformer = [LSMTLValueTransformer transformerUsingReversibleBlock:^(NSString *str, BOOL *success, NSError **error) {
 		return [str stringByAppendingString:@"bar"];
 	}];
 
@@ -37,7 +37,7 @@ it(@"should return a reversible transformer with a block", ^{
 });
 
 it(@"should return a reversible transformer with forward and reverse blocks", ^{
-	MTLValueTransformer *transformer = [MTLValueTransformer
+	LSMTLValueTransformer *transformer = [LSMTLValueTransformer
 		transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
 			return [str stringByAppendingString:@"bar"];
 		}

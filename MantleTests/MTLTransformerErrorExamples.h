@@ -1,5 +1,5 @@
 //
-//  MTLTransformerErrorExamples.h
+//  LSMTLTransformerErrorExamples.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/9/13.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString * const MTLTransformerErrorExamples;
+extern NSString * const LSMTLTransformerErrorExamples;
 
-extern NSString * const MTLTransformerErrorExamplesTransformer;
-extern NSString * const MTLTransformerErrorExamplesInvalidTransformationInput;
-extern NSString * const MTLTransformerErrorExamplesInvalidReverseTransformationInput;
+extern NSString * const LSMTLTransformerErrorExamplesTransformer;
+extern NSString * const LSMTLTransformerErrorExamplesInvalidTransformationInput;
+extern NSString * const LSMTLTransformerErrorExamplesInvalidReverseTransformationInput;

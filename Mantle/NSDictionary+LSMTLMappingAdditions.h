@@ -1,5 +1,5 @@
 //
-//  NSDictionary+MTLMappingAdditions.h
+//  NSDictionary+LSMTLMappingAdditions.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 10/31/13.
@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (MTLMappingAdditions)
+@interface NSDictionary (LSMTLMappingAdditions)
 
 /// Creates an identity mapping for serialization.
 ///
-/// class - A subclass of MTLModel.
+/// class - A subclass of LSMTLModel.
 ///
 /// Returns a dictionary that maps all properties of the given class to
 /// themselves.

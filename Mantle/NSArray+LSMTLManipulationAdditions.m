@@ -1,21 +1,21 @@
 //
-//  NSArray+MTLManipulationAdditions.m
+//  NSArray+LSMTLManipulationAdditions.m
 //  Mantle
 //
 //  Created by Josh Abernathy on 9/19/12.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSArray+MTLManipulationAdditions.h"
+#import "NSArray+LSMTLManipulationAdditions.h"
 
-@interface NSArray (MTLDeclarations)
+@interface NSArray (LSMTLDeclarations)
 
 // This declaration is needed so Mantle can be compiled with SDK 6 / 10.8.
 - (id)firstObject;
 
 @end
 
-@implementation NSArray (MTLManipulationAdditions)
+@implementation NSArray (LSMTLManipulationAdditions)
 
 - (id)mtl_firstObject {
 	return self.firstObject;

@@ -1,16 +1,16 @@
 //
-//  NSDictionary+MTLJSONKeyPath.m
+//  NSDictionary+LSMTLJSONKeyPath.m
 //  Mantle
 //
 //  Created by Robert Böhnke on 19/03/14.
 //  Copyright (c) 2014 GitHub. All rights reserved.
 //
 
-#import "NSDictionary+MTLJSONKeyPath.h"
+#import "NSDictionary+LSMTLJSONKeyPath.h"
 
-#import "MTLJSONAdapter.h"
+#import "LSMTLJSONAdapter.h"
 
-@implementation NSDictionary (MTLJSONKeyPath)
+@implementation NSDictionary (LSMTLJSONKeyPath)
 
 - (id)mtl_valueForJSONKeyPath:(NSString *)JSONKeyPath success:(BOOL *)success error:(NSError **)error {
 	NSArray *components = [JSONKeyPath componentsSeparatedByString:@"."];
@@ -28,7 +28,7 @@
 					NSLocalizedFailureReasonErrorKey: [NSString stringWithFormat:NSLocalizedString(@"JSON key path %1$@ could not resolved because an incompatible JSON dictionary was supplied: \"%2$@\"", @""), JSONKeyPath, self]
 				};
 
-				*error = [NSError errorWithDomain:MTLJSONAdapterErrorDomain code:MTLJSONAdapterErrorInvalidJSONDictionary userInfo:userInfo];
+				*error = [NSError errorWithDomain:LSMTLJSONAdapterErrorDomain code:LSMTLJSONAdapterErrorInvalidJSONDictionary userInfo:userInfo];
 			}
 
 			if (success != NULL) *success = NO;

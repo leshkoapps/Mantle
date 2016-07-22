@@ -1,5 +1,5 @@
 //
-//  MTLDictionaryManipulationSpec.m
+//  LSMTLDictionaryManipulationSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-24.
@@ -10,7 +10,7 @@
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
 
-QuickSpecBegin(MTLDictionaryManipulationAdditions)
+QuickSpecBegin(LSMTLDictionaryManipulationAdditions)
 
 describe(@"-mtl_dictionaryByAddingEntriesFromDictionary:", ^{
 	NSDictionary *dict = @{ @"foo": @"bar", @(5): NSNull.null };

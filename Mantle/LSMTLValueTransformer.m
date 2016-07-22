@@ -1,44 +1,44 @@
 //
-//  MTLValueTransformer.m
+//  LSMTLValueTransformer.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-11.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "MTLValueTransformer.h"
+#import "LSMTLValueTransformer.h"
 
 //
-// Any MTLValueTransformer supporting reverse transformation. Necessary because
+// Any LSMTLValueTransformer supporting reverse transformation. Necessary because
 // +allowsReverseTransformation is a class method.
 //
-@interface MTLReversibleValueTransformer : MTLValueTransformer
+@interface LSMTLReversibleValueTransformer : LSMTLValueTransformer
 @end
 
-@interface MTLValueTransformer ()
+@interface LSMTLValueTransformer ()
 
-@property (nonatomic, copy, readonly) MTLValueTransformerBlock forwardBlock;
-@property (nonatomic, copy, readonly) MTLValueTransformerBlock reverseBlock;
+@property (nonatomic, copy, readonly) LSMTLValueTransformerBlock forwardBlock;
+@property (nonatomic, copy, readonly) LSMTLValueTransformerBlock reverseBlock;
 
 @end
 
-@implementation MTLValueTransformer
+@implementation LSMTLValueTransformer
 
 #pragma mark Lifecycle
 
-+ (instancetype)transformerUsingForwardBlock:(MTLValueTransformerBlock)forwardBlock {
++ (instancetype)transformerUsingForwardBlock:(LSMTLValueTransformerBlock)forwardBlock {
 	return [[self alloc] initWithForwardBlock:forwardBlock reverseBlock:nil];
 }
 
-+ (instancetype)transformerUsingReversibleBlock:(MTLValueTransformerBlock)reversibleBlock {
++ (instancetype)transformerUsingReversibleBlock:(LSMTLValueTransformerBlock)reversibleBlock {
 	return [self transformerUsingForwardBlock:reversibleBlock reverseBlock:reversibleBlock];
 }
 
-+ (instancetype)transformerUsingForwardBlock:(MTLValueTransformerBlock)forwardBlock reverseBlock:(MTLValueTransformerBlock)reverseBlock {
-	return [[MTLReversibleValueTransformer alloc] initWithForwardBlock:forwardBlock reverseBlock:reverseBlock];
++ (instancetype)transformerUsingForwardBlock:(LSMTLValueTransformerBlock)forwardBlock reverseBlock:(LSMTLValueTransformerBlock)reverseBlock {
+	return [[LSMTLReversibleValueTransformer alloc] initWithForwardBlock:forwardBlock reverseBlock:reverseBlock];
 }
 
-- (id)initWithForwardBlock:(MTLValueTransformerBlock)forwardBlock reverseBlock:(MTLValueTransformerBlock)reverseBlock {
+- (id)initWithForwardBlock:(LSMTLValueTransformerBlock)forwardBlock reverseBlock:(LSMTLValueTransformerBlock)reverseBlock {
 	NSParameterAssert(forwardBlock != nil);
 
 	self = [super init];
@@ -81,11 +81,11 @@
 
 @end
 
-@implementation MTLReversibleValueTransformer
+@implementation LSMTLReversibleValueTransformer
 
 #pragma mark Lifecycle
 
-- (id)initWithForwardBlock:(MTLValueTransformerBlock)forwardBlock reverseBlock:(MTLValueTransformerBlock)reverseBlock {
+- (id)initWithForwardBlock:(LSMTLValueTransformerBlock)forwardBlock reverseBlock:(LSMTLValueTransformerBlock)reverseBlock {
 	NSParameterAssert(reverseBlock != nil);
 	return [super initWithForwardBlock:forwardBlock reverseBlock:reverseBlock];
 }
@@ -118,7 +118,7 @@
 @end
 
 
-@implementation MTLValueTransformer (Deprecated)
+@implementation LSMTLValueTransformer (Deprecated)
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-implementations"

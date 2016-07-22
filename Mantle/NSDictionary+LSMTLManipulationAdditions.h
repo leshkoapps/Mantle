@@ -1,5 +1,5 @@
 //
-//  NSDictionary+MTLManipulationAdditions.h
+//  NSDictionary+LSMTLManipulationAdditions.h
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-24.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (MTLManipulationAdditions)
+@interface NSDictionary (LSMTLManipulationAdditions)
 
 /// Merges the keys and values from the given dictionary into the receiver. If
 /// both the receiver and `dictionary` have a given key, the value from
@@ -24,7 +24,7 @@
 
 @end
 
-@interface NSDictionary (MTLManipulationAdditions_Deprecated)
+@interface NSDictionary (LSMTLManipulationAdditions_Deprecated)
 
 - (NSDictionary *)mtl_dictionaryByRemovingEntriesWithKeys:(NSSet *)keys __attribute__((deprecated("Replaced by -mtl_dictionaryByRemovingValuesForKeys:")));
 

@@ -1,5 +1,5 @@
 //
-//  NSDictionary+MTLJSONKeyPath.h
+//  NSDictionary+LSMTLJSONKeyPath.h
 //  Mantle
 //
 //  Created by Robert Böhnke on 19/03/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (MTLJSONKeyPath)
+@interface NSDictionary (LSMTLJSONKeyPath)
 
 /// Looks up the value of a key path in the receiver.
 ///

@@ -1,33 +1,33 @@
 //
-//  MTLTestModel.m
+//  LSMTLTestModel.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-11.
 //  Copyright (c) 2012 GitHub. All rights reserved.
 //
 
-#import "NSDictionary+MTLManipulationAdditions.h"
+#import "NSDictionary+LSMTLManipulationAdditions.h"
 
-#import "MTLTestModel.h"
-#import "NSDictionary+MTLMappingAdditions.h"
+#import "LSMTLTestModel.h"
+#import "NSDictionary+LSMTLMappingAdditions.h"
 
-NSString * const MTLTestModelErrorDomain = @"MTLTestModelErrorDomain";
-const NSInteger MTLTestModelNameTooLong = 1;
-const NSInteger MTLTestModelNameMissing = 2;
+NSString * const LSMTLTestModelErrorDomain = @"LSMTLTestModelErrorDomain";
+const NSInteger LSMTLTestModelNameTooLong = 1;
+const NSInteger LSMTLTestModelNameMissing = 2;
 
 static NSUInteger modelVersion = 1;
 
-@implementation MTLEmptyTestModel
+@implementation LSMTLEmptyTestModel
 @end
 
-@implementation MTLTestModel
+@implementation LSMTLTestModel
 
 #pragma mark Properties
 
 - (BOOL)validateName:(NSString **)name error:(NSError **)error {
 	if ([*name length] < 10) return YES;
 	if (error != NULL) {
-		*error = [NSError errorWithDomain:MTLTestModelErrorDomain code:MTLTestModelNameTooLong userInfo:nil];
+		*error = [NSError errorWithDomain:LSMTLTestModelErrorDomain code:LSMTLTestModelNameTooLong userInfo:nil];
 	}
 
 	return NO;
@@ -57,7 +57,7 @@ static NSUInteger modelVersion = 1;
 	return self;
 }
 
-#pragma mark MTLJSONSerializing
+#pragma mark LSMTLJSONSerializing
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	NSMutableDictionary *mapping = [[NSDictionary mtl_identityPropertyMapWithModel:self] mutableCopy];
@@ -72,7 +72,7 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)countJSONTransformer {
-	return [MTLValueTransformer
+	return [LSMTLValueTransformer
 		transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
 			return @(str.integerValue);
 		}
@@ -93,7 +93,7 @@ static NSUInteger modelVersion = 1;
 
 + (NSDictionary *)encodingBehaviorsByPropertyKey {
 	return [super.encodingBehaviorsByPropertyKey mtl_dictionaryByAddingEntriesFromDictionary:@{
-		@"nestedName": @(MTLModelEncodingBehaviorExcluded)
+		@"nestedName": @(LSMTLModelEncodingBehaviorExcluded)
 	}];
 }
 
@@ -121,9 +121,9 @@ static NSUInteger modelVersion = 1;
 
 #pragma mark Property Storage Behavior
 
-+ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
++ (LSMTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
 	if ([propertyKey isEqual:@"weakModel"]) {
-		return MTLPropertyStorageTransitory;
+		return LSMTLPropertyStorageTransitory;
 	} else {
 		return [super storageBehaviorForPropertyWithKey:propertyKey];
 	}
@@ -131,16 +131,16 @@ static NSUInteger modelVersion = 1;
 
 #pragma mark Merging
 
-- (void)mergeCountFromModel:(MTLTestModel *)model {
+- (void)mergeCountFromModel:(LSMTLTestModel *)model {
 	self.count += model.count;
 }
 
 @end
 
-@implementation MTLSubclassTestModel
+@implementation LSMTLSubclassTestModel
 @end
 
-@implementation MTLArrayTestModel
+@implementation LSMTLArrayTestModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -150,7 +150,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLSubstitutingTestModel
+@implementation LSMTLSubstitutingTestModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [NSDictionary mtl_identityPropertyMapWithModel:self];
@@ -162,13 +162,13 @@ static NSUInteger modelVersion = 1;
 	if (JSONDictionary[@"username"] == nil) {
 		return nil;
 	} else {
-		return MTLTestModel.class;
+		return LSMTLTestModel.class;
 	}
 }
 
 @end
 
-@implementation MTLValidationModel
+@implementation LSMTLValidationModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -179,7 +179,7 @@ static NSUInteger modelVersion = 1;
 - (BOOL)validateName:(NSString **)name error:(NSError **)error {
 	if (*name != nil) return YES;
 	if (error != NULL) {
-		*error = [NSError errorWithDomain:MTLTestModelErrorDomain code:MTLTestModelNameMissing userInfo:nil];
+		*error = [NSError errorWithDomain:LSMTLTestModelErrorDomain code:LSMTLTestModelNameMissing userInfo:nil];
 	}
 
 	return NO;
@@ -187,7 +187,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLSelfValidatingModel
+@implementation LSMTLSelfValidatingModel
 
 - (BOOL)validateName:(NSString **)name error:(NSError **)error {
 	if (*name != nil) return YES;
@@ -199,7 +199,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLURLModel
+@implementation LSMTLURLModel
 
 - (instancetype)init {
 	self = [super init];
@@ -215,7 +215,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLBoolModel
+@implementation LSMTLBoolModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [NSDictionary mtl_identityPropertyMapWithModel:self];
@@ -223,7 +223,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLStringModel
+@implementation LSMTLStringModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [NSDictionary mtl_identityPropertyMapWithModel:self];
@@ -231,7 +231,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLIDModel
+@implementation LSMTLIDModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [NSDictionary mtl_identityPropertyMapWithModel:self];
@@ -239,7 +239,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLNonPropertyModel
+@implementation LSMTLNonPropertyModel
 
 + (NSSet *)propertyKeys {
 	return [NSSet setWithObject:@"homepage"];
@@ -249,15 +249,15 @@ static NSUInteger modelVersion = 1;
 	return [NSURL URLWithString:@"about:blank"];
 }
 
-+ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
++ (LSMTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
 	if ([propertyKey isEqual:@"homepage"]) {
-		return MTLPropertyStoragePermanent;
+		return LSMTLPropertyStoragePermanent;
 	}
 
 	return [super storageBehaviorForPropertyWithKey:propertyKey];
 }
 
-#pragma mark - MTLJSONSerializing
+#pragma mark - LSMTLJSONSerializing
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -267,13 +267,13 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@interface MTLConformingModel ()
+@interface LSMTLConformingModel ()
 
 - (instancetype)initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError **)error;
 
 @end
 
-@implementation MTLConformingModel
+@implementation LSMTLConformingModel
 
 #pragma mark Lifecycle
 
@@ -294,7 +294,7 @@ static NSUInteger modelVersion = 1;
 	return YES;
 }
 
-#pragma mark MTLModel
+#pragma mark LSMTLModel
 
 - (NSDictionary *)dictionaryValue {
 	if (self.name == nil) return @{};
@@ -308,17 +308,17 @@ static NSUInteger modelVersion = 1;
 	return [NSSet setWithObject:@"name"];
 }
 
-- (void)mergeValueForKey:(NSString *)key fromModel:(id<MTLModel>)model {
+- (void)mergeValueForKey:(NSString *)key fromModel:(id<LSMTLModel>)model {
 	if ([key isEqualToString:@"name"]) {
 		self.name = [model dictionaryValue][@"name"];
 	}
 }
 
-- (void)mergeValuesForKeysFromModel:(id<MTLModel>)model {
+- (void)mergeValuesForKeysFromModel:(id<LSMTLModel>)model {
 	self.name = [model dictionaryValue][@"name"];
 }
 
-#pragma mark MTLJSONSerializing
+#pragma mark LSMTLJSONSerializing
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -332,7 +332,7 @@ static NSUInteger modelVersion = 1;
 	return self.name.hash;
 }
 
-- (BOOL)isEqual:(MTLConformingModel *)model {
+- (BOOL)isEqual:(LSMTLConformingModel *)model {
 	if (self == model) return YES;
 	if (![model isMemberOfClass:self.class]) return NO;
 
@@ -347,7 +347,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLStorageBehaviorModel
+@implementation LSMTLStorageBehaviorModel
 
 - (id)notIvarBacked {
 	return self;
@@ -355,15 +355,15 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLStorageBehaviorModelSubclass
+@implementation LSMTLStorageBehaviorModelSubclass
 
 @dynamic shadowedInSubclass;
 
 @end
 
-@implementation MTLMultiKeypathModel
+@implementation LSMTLMultiKeypathModel
 
-#pragma mark MTLJSONSerializing
+#pragma mark LSMTLJSONSerializing
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -373,7 +373,7 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)rangeJSONTransformer {
-	return [MTLValueTransformer
+	return [LSMTLValueTransformer
 		transformerUsingForwardBlock:^(NSDictionary *value, BOOL *success, NSError **error) {
 			NSUInteger location = [value[@"location"] unsignedIntegerValue];
 			NSUInteger length = [value[@"length"] unsignedIntegerValue];
@@ -390,7 +390,7 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)nestedRangeJSONTransformer {
-	return [MTLValueTransformer
+	return [LSMTLValueTransformer
 		transformerUsingForwardBlock:^(NSDictionary *value, BOOL *success, NSError **error) {
 			NSUInteger location = [value[@"nested.location"] unsignedIntegerValue];
 			NSUInteger length = [value[@"nested.length"] unsignedIntegerValue];
@@ -407,7 +407,7 @@ static NSUInteger modelVersion = 1;
 }
 @end
 
-@implementation MTLClassClusterModel : MTLModel
+@implementation LSMTLClassClusterModel : LSMTLModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -417,11 +417,11 @@ static NSUInteger modelVersion = 1;
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
 	if ([JSONDictionary[@"flavor"] isEqualToString:@"chocolate"]) {
-		return MTLChocolateClassClusterModel.class;
+		return LSMTLChocolateClassClusterModel.class;
 	}
 
 	if ([JSONDictionary[@"flavor"] isEqualToString:@"strawberry"]) {
-		return MTLStrawberryClassClusterModel.class;
+		return LSMTLStrawberryClassClusterModel.class;
 	}
 
 	return nil;
@@ -429,7 +429,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLChocolateClassClusterModel : MTLClassClusterModel
+@implementation LSMTLChocolateClassClusterModel : LSMTLClassClusterModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
@@ -442,7 +442,7 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)bitternessJSONTransformer {
-	return [MTLValueTransformer
+	return [LSMTLValueTransformer
 		transformerUsingForwardBlock:^(NSString *string, BOOL *success, NSError **error) {
 			NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
 
@@ -455,7 +455,7 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLStrawberryClassClusterModel
+@implementation LSMTLStrawberryClassClusterModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
@@ -469,11 +469,11 @@ static NSUInteger modelVersion = 1;
 
 @end
 
-@implementation MTLOptionalPropertyModel
+@implementation LSMTLOptionalPropertyModel
 
 @end
 
-@implementation MTLRecursiveUserModel
+@implementation LSMTLRecursiveUserModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -483,12 +483,12 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)groupsJSONTransformer {
-	return [MTLJSONAdapter arrayTransformerWithModelClass:MTLRecursiveGroupModel.class];
+	return [LSMTLJSONAdapter arrayTransformerWithModelClass:LSMTLRecursiveGroupModel.class];
 }
 
 @end
 
-@implementation MTLRecursiveGroupModel
+@implementation LSMTLRecursiveGroupModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
@@ -498,21 +498,21 @@ static NSUInteger modelVersion = 1;
 }
 
 + (NSValueTransformer *)ownerJSONTransformer {
-	return [MTLJSONAdapter dictionaryTransformerWithModelClass:MTLRecursiveUserModel.class];
+	return [LSMTLJSONAdapter dictionaryTransformerWithModelClass:LSMTLRecursiveUserModel.class];
 }
 
 + (NSValueTransformer *)usersJSONTransformer {
-	return [MTLJSONAdapter arrayTransformerWithModelClass:MTLRecursiveUserModel.class];
+	return [LSMTLJSONAdapter arrayTransformerWithModelClass:LSMTLRecursiveUserModel.class];
 }
 
 @end
 
-@implementation MTLPropertyDefaultAdapterModel
+@implementation LSMTLPropertyDefaultAdapterModel
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
 	return @{
-		@"conformingMTLJSONSerializingProperty": @"conformingMTLJSONSerializingProperty",
-		@"nonConformingMTLJSONSerializingProperty": @"nonConformingMTLJSONSerializingProperty",
+		@"conformingLSMTLJSONSerializingProperty": @"conformingLSMTLJSONSerializingProperty",
+		@"nonConformingLSMTLJSONSerializingProperty": @"nonConformingLSMTLJSONSerializingProperty",
 		@"property": @"property"
 	};
 }

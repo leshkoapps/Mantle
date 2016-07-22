@@ -1,5 +1,5 @@
 //
-//  MTLPredefinedTransformerAdditionsSpec.m
+//  LSMTLPredefinedTransformerAdditionsSpec.m
 //  Mantle
 //
 //  Created by Justin Spahr-Summers on 2012-09-27.
@@ -9,24 +9,24 @@
 #import <Mantle/Mantle.h>
 #import <Nimble/Nimble.h>
 #import <Quick/Quick.h>
-#import "MTLTransformerErrorExamples.h"
+#import "LSMTLTransformerErrorExamples.h"
 
-#import "MTLTestModel.h"
+#import "LSMTLTestModel.h"
 
 enum : NSInteger {
-	MTLPredefinedTransformerAdditionsSpecEnumNegative = -1,
-	MTLPredefinedTransformerAdditionsSpecEnumZero = 0,
-	MTLPredefinedTransformerAdditionsSpecEnumPositive = 1,
-	MTLPredefinedTransformerAdditionsSpecEnumDefault = 42,
-} MTLPredefinedTransformerAdditionsSpecEnum;
+	LSMTLPredefinedTransformerAdditionsSpecEnumNegative = -1,
+	LSMTLPredefinedTransformerAdditionsSpecEnumZero = 0,
+	LSMTLPredefinedTransformerAdditionsSpecEnumPositive = 1,
+	LSMTLPredefinedTransformerAdditionsSpecEnumDefault = 42,
+} LSMTLPredefinedTransformerAdditionsSpecEnum;
 
-QuickSpecBegin(MTLPredefinedTransformerAdditions)
+QuickSpecBegin(LSMTLPredefinedTransformerAdditions)
 
 describe(@"The URL transformer", ^{
 	__block NSValueTransformer *transformer;
 
 	beforeEach(^{
-		transformer = [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+		transformer = [NSValueTransformer valueTransformerForName:LSMTLURLValueTransformerName];
 
 		expect(transformer).notTo(beNil());
 		expect(@([transformer.class allowsReverseTransformation])).to(beTruthy());
@@ -41,11 +41,11 @@ describe(@"The URL transformer", ^{
 		expect([transformer reverseTransformedValue:nil]).to(beNil());
 	});
 
-	itBehavesLike(MTLTransformerErrorExamples, ^{
+	itBehavesLike(LSMTLTransformerErrorExamples, ^{
 		return @{
-			MTLTransformerErrorExamplesTransformer: transformer,
-			MTLTransformerErrorExamplesInvalidTransformationInput: @"not a valid URL",
-			MTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
+			LSMTLTransformerErrorExamplesTransformer: transformer,
+			LSMTLTransformerErrorExamplesInvalidTransformationInput: @"not a valid URL",
+			LSMTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
 		};
 	});
 });
@@ -54,7 +54,7 @@ describe(@"The number transformer", ^{
 	__block NSValueTransformer *transformer;
 
 	beforeEach(^{
-		transformer = [NSValueTransformer valueTransformerForName:MTLBooleanValueTransformerName];
+		transformer = [NSValueTransformer valueTransformerForName:LSMTLBooleanValueTransformerName];
 		expect(transformer).notTo(beNil());
 		expect(@([transformer.class allowsReverseTransformation])).to(beTruthy());
 	});
@@ -81,11 +81,11 @@ describe(@"The number transformer", ^{
 		expect([transformer reverseTransformedValue:nil]).to(beNil());
 	});
 
-	itBehavesLike(MTLTransformerErrorExamples, ^{
+	itBehavesLike(LSMTLTransformerErrorExamples, ^{
 		return @{
-			MTLTransformerErrorExamplesTransformer: transformer,
-			MTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
-			MTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
+			LSMTLTransformerErrorExamplesTransformer: transformer,
+			LSMTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
+			LSMTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
 		};
 	});
 });
@@ -106,7 +106,7 @@ describe(@"+mtl_arrayMappingTransformerWithTransformer:", ^{
 
 	describe(@"when called with a reversible transformer", ^{
 		beforeEach(^{
-			NSValueTransformer *appliedTransformer = [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+			NSValueTransformer *appliedTransformer = [NSValueTransformer valueTransformerForName:LSMTLURLValueTransformerName];
 			transformer = [NSValueTransformer mtl_arrayMappingTransformerWithTransformer:appliedTransformer];
 			expect(transformer).notTo(beNil());
 		});
@@ -126,7 +126,7 @@ describe(@"+mtl_arrayMappingTransformerWithTransformer:", ^{
 
 	describe(@"when called with a non-reversible transformer", ^{
 		beforeEach(^{
-			NSValueTransformer *appliedTransformer = [MTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
+			NSValueTransformer *appliedTransformer = [LSMTLValueTransformer transformerUsingForwardBlock:^(NSString *str, BOOL *success, NSError **error) {
 				return [NSURL URLWithString:str];
 			}];
 			transformer = [NSValueTransformer mtl_arrayMappingTransformerWithTransformer:appliedTransformer];
@@ -142,11 +142,11 @@ describe(@"+mtl_arrayMappingTransformerWithTransformer:", ^{
 		});
 	});
 
-	itBehavesLike(MTLTransformerErrorExamples, ^{
+	itBehavesLike(LSMTLTransformerErrorExamples, ^{
 		return @{
-			MTLTransformerErrorExamplesTransformer: transformer,
-			MTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
-			MTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
+			LSMTLTransformerErrorExamplesTransformer: transformer,
+			LSMTLTransformerErrorExamplesInvalidTransformationInput: NSNull.null,
+			LSMTLTransformerErrorExamplesInvalidReverseTransformationInput: NSNull.null
 		};
 	});
 });
@@ -155,9 +155,9 @@ describe(@"value mapping transformer", ^{
 	__block NSValueTransformer *transformer;
 
 	NSDictionary *dictionary = @{
-		@"negative": @(MTLPredefinedTransformerAdditionsSpecEnumNegative),
-		@[ @"zero" ]: @(MTLPredefinedTransformerAdditionsSpecEnumZero),
-		@"positive": @(MTLPredefinedTransformerAdditionsSpecEnumPositive),
+		@"negative": @(LSMTLPredefinedTransformerAdditionsSpecEnumNegative),
+		@[ @"zero" ]: @(LSMTLPredefinedTransformerAdditionsSpecEnumZero),
+		@"positive": @(LSMTLPredefinedTransformerAdditionsSpecEnumPositive),
 	};
 
 	beforeEach(^{
@@ -165,30 +165,30 @@ describe(@"value mapping transformer", ^{
 	});
 
 	it(@"should transform enum values into strings", ^{
-		expect([transformer transformedValue:@"negative"]).to(equal(@(MTLPredefinedTransformerAdditionsSpecEnumNegative)));
-		expect([transformer transformedValue:@[ @"zero" ]]).to(equal(@(MTLPredefinedTransformerAdditionsSpecEnumZero)));
-		expect([transformer transformedValue:@"positive"]).to(equal(@(MTLPredefinedTransformerAdditionsSpecEnumPositive)));
+		expect([transformer transformedValue:@"negative"]).to(equal(@(LSMTLPredefinedTransformerAdditionsSpecEnumNegative)));
+		expect([transformer transformedValue:@[ @"zero" ]]).to(equal(@(LSMTLPredefinedTransformerAdditionsSpecEnumZero)));
+		expect([transformer transformedValue:@"positive"]).to(equal(@(LSMTLPredefinedTransformerAdditionsSpecEnumPositive)));
 	});
 
 	it(@"should transform strings into enum values", ^{
 		expect(@([transformer.class allowsReverseTransformation])).to(beTruthy());
 
-		expect([transformer reverseTransformedValue:@(MTLPredefinedTransformerAdditionsSpecEnumNegative)]).to(equal(@"negative"));
-		expect([transformer reverseTransformedValue:@(MTLPredefinedTransformerAdditionsSpecEnumZero)]).to(equal(@[ @"zero" ]));
-		expect([transformer reverseTransformedValue:@(MTLPredefinedTransformerAdditionsSpecEnumPositive)]).to(equal(@"positive"));
+		expect([transformer reverseTransformedValue:@(LSMTLPredefinedTransformerAdditionsSpecEnumNegative)]).to(equal(@"negative"));
+		expect([transformer reverseTransformedValue:@(LSMTLPredefinedTransformerAdditionsSpecEnumZero)]).to(equal(@[ @"zero" ]));
+		expect([transformer reverseTransformedValue:@(LSMTLPredefinedTransformerAdditionsSpecEnumPositive)]).to(equal(@"positive"));
 	});
 
 	describe(@"default values", ^{
 		beforeEach(^{
-			transformer = [NSValueTransformer mtl_valueMappingTransformerWithDictionary:dictionary defaultValue:@(MTLPredefinedTransformerAdditionsSpecEnumDefault) reverseDefaultValue:@"default"];
+			transformer = [NSValueTransformer mtl_valueMappingTransformerWithDictionary:dictionary defaultValue:@(LSMTLPredefinedTransformerAdditionsSpecEnumDefault) reverseDefaultValue:@"default"];
 		});
 
 		it(@"should transform unknown strings into the default enum value", ^{
-			expect([transformer transformedValue:@"unknown"]).to(equal(@(MTLPredefinedTransformerAdditionsSpecEnumDefault)));
+			expect([transformer transformedValue:@"unknown"]).to(equal(@(LSMTLPredefinedTransformerAdditionsSpecEnumDefault)));
 		});
 
 		it(@"should transform the default enum value into the default string", ^{
-			expect([transformer reverseTransformedValue:@(MTLPredefinedTransformerAdditionsSpecEnumDefault)]).to(equal(@"default"));
+			expect([transformer reverseTransformedValue:@(LSMTLPredefinedTransformerAdditionsSpecEnumDefault)]).to(equal(@"default"));
 		});
 	});
 });
